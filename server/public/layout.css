@@ -1,0 +1,90 @@
+body {
+  font-family: sans-serif;
+  background-color: #eafbff;
+}
+
+.not-logged-in-header {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  text-align: center;
+}
+
+.login-form-container {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.login-form {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.login-label {
+  margin-top: 1.5rem;
+}
+
+.login-input {
+  margin-top: 0.5rem;
+}
+
+.login-button {
+  width: fit-content;
+  margin-top: 1rem;
+}
+
+.signup-link {
+  margin-top: 2rem;
+}
+
+.login-button-container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-form-container {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.signup-form {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.signup-label {
+  margin-top: 1.5rem;
+}
+
+.signup-input {
+  margin-top: 0.5rem;
+}
+
+.signup-button {
+  width: fit-content;
+  margin-top: 1rem;
+}
+
+.login-link {
+  margin-top: 2rem;
+}
+
+.signup-button-container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
