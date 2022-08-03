@@ -97,3 +97,13 @@
   cursor: pointer;
   color: rgb(97, 97, 97);
 }
+
+.isvalid-login-true {
+  display: none;
+}
+
+.isvalid-login-false {
+  color: red;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}

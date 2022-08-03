@@ -54,7 +54,7 @@ app.post('/api/users/signIn', (req, res, next) => {
           if (!isMatching) {
             throw new ClientError(401, 'invalid login');
           }
-          // console.log('ismatching', isMatching);
+          // console.log('ismatching?', isMatching);
           const payload = { userId, username };
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);
           res.json({ token, user: payload });

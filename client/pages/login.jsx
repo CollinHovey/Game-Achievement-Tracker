@@ -6,7 +6,7 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      login: ''
+      login: true
     };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -28,12 +28,10 @@ class Login extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // console.log('username: ', this.state.username, 'password: ', this.state.password);
     const login = {
       username: this.state.username,
       password: this.state.password
     };
-    // console.log('Send Login Data', login);
     fetch('/api/users/signIn', {
       method: 'POST',
       headers: {
@@ -44,13 +42,18 @@ class Login extends React.Component {
       .then(response => response.json()
         .then(data => {
           // console.log('login succesful', data);
-
-          localStorage.setItem('token', JSON.stringify(data));
-          window.location.hash = '#home';
+          if (!data.error) {
+            // console.log('login succesful', data);
+            localStorage.setItem('token', JSON.stringify(data));
+            window.location.hash = '#home';
+          } else {
+            // console.log('invalid login then');
+            this.setState({ login: false });
+          }
         })
         .catch(() => {
-          // console.log('invalid login');
-          this.setState({ login: 'invalid' });
+          // console.log('invalid login catch');
+          this.setState({ login: false });
         }));
     this.setState({ username: '' });
     this.setState({ password: '' });
@@ -67,6 +70,7 @@ class Login extends React.Component {
             <label className='login-label' htmlFor='loginPassword'>Password</label>
             <input required className='login-input' type='password' id='loginPassword' value={this.state.password} onChange={this.handlePasswordChange}></input>
             <div className='login-button-container'>
+              <p className={`isvalid-login-${this.state.login}`}>Login Invalid</p>
               <button className='login-button'>Login</button>
               <a href='#signup' className='signup-link'>{'Don\'t have and account? Sign up now!'}</a>
             </div>
