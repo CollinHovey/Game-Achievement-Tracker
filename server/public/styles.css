@@ -35,6 +35,7 @@
 }
 
 .signup-link {
+  color: black;
   transition: ease-in-out 0.2s;
   text-decoration: none;
 }
@@ -82,6 +83,7 @@
 }
 
 .login-link {
+  color: black;
   transition: ease-in-out 0.2s;
   text-decoration: none;
 }

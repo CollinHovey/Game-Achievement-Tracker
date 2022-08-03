@@ -5,7 +5,8 @@ class Login extends React.Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      login: ''
     };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -28,6 +29,29 @@ class Login extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     // console.log('username: ', this.state.username, 'password: ', this.state.password);
+    const login = {
+      username: this.state.username,
+      password: this.state.password
+    };
+    // console.log('Send Login Data', login);
+    fetch('/api/users/signIn', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(login)
+    })
+      .then(response => response.json()
+        .then(data => {
+          // console.log('login succesful', data);
+
+          localStorage.setItem('token', JSON.stringify(data));
+          window.location.hash = '#home';
+        })
+        .catch(() => {
+          // console.log('invalid login');
+          this.setState({ login: 'invalid' });
+        }));
     this.setState({ username: '' });
     this.setState({ password: '' });
   }
@@ -44,9 +68,8 @@ class Login extends React.Component {
             <input required className='login-input' type='password' id='loginPassword' value={this.state.password} onChange={this.handlePasswordChange}></input>
             <div className='login-button-container'>
               <button className='login-button'>Login</button>
-              <a href='index.html#signup' className='signup-link'>{'Don\'t have and account? Sign up now!'}</a>
+              <a href='#signup' className='signup-link'>{'Don\'t have and account? Sign up now!'}</a>
             </div>
-
           </form>
         </div>
       </>
