@@ -1,6 +1,6 @@
 body {
   font-family: sans-serif;
-  background-color: #eafbff;
+  background-color: #b5b5b5;
 }
 
 .not-logged-in-header {
@@ -12,9 +12,11 @@ body {
 }
 
 .login-form-container {
-  margin-top: 4rem;
+  padding-top: 4rem;
+  padding-bottom: 6.6rem;
   display: flex;
   justify-content: center;
+  background-color: #eafbff;
 }
 
 .login-form {
@@ -51,9 +53,11 @@ body {
 }
 
 .signup-form-container {
-  margin-top: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2.5rem;
   display: flex;
   justify-content: center;
+  background-color: #eafbff;
 }
 
 .signup-form {
@@ -87,4 +91,34 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  padding-right: 1rem;
+}
+
+@media screen and (max-width: 923px) {
+  .login-form-container {
+    padding-bottom: 6rem;
+  }
+
+  .login-form {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .signup-form-container {
+    padding-bottom: 1.9rem;
+  }
+
+  .signup-form {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

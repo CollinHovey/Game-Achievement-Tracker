@@ -18,10 +18,10 @@ export default class HomeLoggedOut extends React.Component {
 
   render() {
     return (
-      <>
-        <h1>Hello Guest!</h1>
-        <button className='login-button' onClick={this.login}>Log In</button>
-      </>
+      <div className='header-container'>
+        <h1 className='header-title'>Hello Guest!</h1>
+        <button className='login-button big-button' onClick={this.login}>Log In</button>
+      </div>
     );
   }
 }

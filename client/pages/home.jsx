@@ -15,6 +15,9 @@ export default class Home extends React.Component {
       return (
         <>
           <HomeLoggedIn />
+          <div className='home-content-test'>
+            <h1>Content Test</h1>
+          </div>
         </>
       );
     } else {

@@ -74,7 +74,7 @@ export default class Signup extends React.Component {
             <label className='signup-label' htmlFor='email'>Email</label>
             <input required className='signup-input' type='email' id='email' value={this.state.email} onChange={this.handleEmailChange}></input>
             <div className='signup-button-container'>
-              <button className='signup-button'>Sign Up</button>
+              <button className='signup-button big-button'>Sign Up</button>
               <a href='#login' className='login-link'>Already have an account? Login!</a>
             </div>
 

@@ -20,20 +20,6 @@
   outline: 0.15rem solid rgb(100, 100, 100);
 }
 
-.login-button {
-  font-size: 2rem;
-  border: none;
-  border-radius: 1rem;
-  padding: 0.5rem 2rem;
-  transition: ease-in-out 0.2s;
-}
-
-.login-button:hover {
-  transition: ease-in-out 0.2s;
-  cursor: pointer;
-  background-color: #b5b5b5;
-}
-
 .signup-link {
   color: black;
   transition: ease-in-out 0.2s;
@@ -68,20 +54,6 @@
   outline: 0.15rem solid rgb(100, 100, 100);
 }
 
-.signup-button {
-  font-size: 2rem;
-  border: none;
-  border-radius: 1rem;
-  padding: 0.5rem 2rem;
-  transition: ease-in-out 0.2s;
-}
-
-.signup-button:hover {
-  transition: ease-in-out 0.2s;
-  cursor: pointer;
-  background-color: #b5b5b5;
-}
-
 .login-link {
   color: black;
   transition: ease-in-out 0.2s;
@@ -106,4 +78,30 @@
   color: red;
   margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+.big-button {
+  font-size: 2rem;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.5rem 1.5rem;
+  transition: ease-in-out 0.2s;
+}
+
+.big-button:hover {
+  transition: ease-in-out 0.2s;
+  cursor: pointer;
+  background-color: #b5b5b5;
+}
+
+.header-title {
+  margin: 0;
+}
+
+.header-container {
+  background-color: #eafbff;
+}
+
+.home-content-test {
+  background-color: #b5b5b5;
 }

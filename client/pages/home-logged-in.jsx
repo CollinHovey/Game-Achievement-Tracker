@@ -15,10 +15,10 @@ export default class HomeLoggedIn extends React.Component {
     // console.log(this.context);
     const { handleSignOut } = this.context;
     return (
-      <>
-        <h1>Welcome Back {this.context.username}!</h1>
-        <button className='logout-button' onClick={handleSignOut}>Log Out</button>
-      </>
+      <div className='header-container'>
+        <h1 className='header-title'>Welcome Back {this.context.username}!</h1>
+        <button className='logout-button big-button' onClick={handleSignOut}>Log Out</button>
+      </div>
     );
   }
 }
