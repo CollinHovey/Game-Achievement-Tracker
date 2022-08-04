@@ -6,12 +6,12 @@ import UserContext from '../lib/user-context';
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loggedIn: JSON.parse(localStorage.getItem('token')) };
+    this.state = { user: this.context };
   }
 
   render() {
-    // console.log('loggedin', this.state.loggedIn);
-    if (this.state.loggedIn) {
+    // console.log('home context', this.context);
+    if (this.context.user !== null) {
       return (
         <>
           <HomeLoggedIn />

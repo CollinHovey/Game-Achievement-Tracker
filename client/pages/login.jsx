@@ -1,4 +1,5 @@
 import React from 'react';
+import UserContext from '../lib/user-context';
 
 class Login extends React.Component {
   constructor(props) {
@@ -41,19 +42,15 @@ class Login extends React.Component {
     })
       .then(response => response.json()
         .then(data => {
-          // console.log('login succesful', data);
           if (!data.error) {
             // console.log('login succesful', data);
-            localStorage.setItem('token', JSON.stringify(data));
+            this.context.handleSignIn(data);
             window.location.hash = '#home';
+            return data;
           } else {
             // console.log('invalid login then');
             this.setState({ login: false });
           }
-        })
-        .catch(() => {
-          // console.log('invalid login catch');
-          this.setState({ login: false });
         }));
     this.setState({ username: '' });
     this.setState({ password: '' });
@@ -80,5 +77,6 @@ class Login extends React.Component {
     );
   }
 }
+Login.contextType = UserContext;
 
 export default Login;
