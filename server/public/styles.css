@@ -1,0 +1,107 @@
+.login-form {
+  background-color: #d9d9d9;
+  border-radius: 1rem;
+}
+
+.not-logged-in-header {
+  background-color: #f0f0f0;
+}
+
+.login-input {
+  font-size: 2rem;
+  border: none;
+  border-radius: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-shadow: 5px 5px 15px 0 rgb(0, 0, 0, 0.3);
+}
+
+.login-input:focus {
+  outline: 0.15rem solid rgb(100, 100, 100);
+}
+
+.signup-link {
+  color: black;
+  transition: ease-in-out 0.2s;
+  text-decoration: none;
+}
+
+.signup-link:visited {
+  color: black;
+}
+
+.signup-link:hover {
+  transition: ease-in-out 0.2s;
+  cursor: pointer;
+  color: rgb(97, 97, 97);
+}
+
+.signup-form {
+  background-color: #d9d9d9;
+  border-radius: 1rem;
+}
+
+.signup-input {
+  font-size: 2rem;
+  border: none;
+  border-radius: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-shadow: 5px 5px 15px 0 rgb(0, 0, 0, 0.3);
+}
+
+.signup-input:focus {
+  outline: 0.15rem solid rgb(100, 100, 100);
+}
+
+.login-link {
+  color: black;
+  transition: ease-in-out 0.2s;
+  text-decoration: none;
+}
+
+.login-link:visited {
+  color: black;
+}
+
+.login-link:hover {
+  transition: ease-in-out 0.2s;
+  cursor: pointer;
+  color: rgb(97, 97, 97);
+}
+
+.isvalid-login-true {
+  display: none;
+}
+
+.isvalid-login-false {
+  color: red;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.big-button {
+  font-size: 2rem;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.5rem 1.5rem;
+  transition: ease-in-out 0.2s;
+}
+
+.big-button:hover {
+  transition: ease-in-out 0.2s;
+  cursor: pointer;
+  background-color: #b5b5b5;
+}
+
+.header-title {
+  margin: 0;
+}
+
+.header-container {
+  background-color: #eafbff;
+}
+
+.home-content-test {
+  background-color: #b5b5b5;
+}
