@@ -1,6 +1,7 @@
 body {
   font-family: sans-serif;
-  background-color: #b5b5b5;
+  background-color: #f0f0f0;
+  font-size: 1rem;
 }
 
 .not-logged-in-header {
@@ -38,7 +39,6 @@ body {
 
 .login-button {
   width: fit-content;
-  margin-top: 1rem;
 }
 
 .signup-link {
@@ -101,6 +101,10 @@ body {
   padding-bottom: 1rem;
   padding-left: 2rem;
   padding-right: 1rem;
+}
+
+.nav-container {
+  flex-basis: 70%;
 }
 
 @media screen and (max-width: 923px) {

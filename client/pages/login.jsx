@@ -15,10 +15,6 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    // console.log('rendered Login');
-  }
-
   handleUsernameChange(event) {
     this.setState({ username: event.target.value });
   }
@@ -43,12 +39,10 @@ class Login extends React.Component {
       .then(response => response.json()
         .then(data => {
           if (!data.error) {
-            // console.log('login succesful', data);
             this.context.handleSignIn(data);
             window.location.hash = '#home';
             return data;
           } else {
-            // console.log('invalid login then');
             this.setState({ login: false });
           }
         }));
@@ -63,9 +57,9 @@ class Login extends React.Component {
         <div className='login-form-container'>
           <form className='login-form' onSubmit={this.handleSubmit}>
             <label className='login-label' htmlFor='loginUsername'>Username</label>
-            <input required className='login-input' id='loginUsername' value={this.state.username} onChange={this.handleUsernameChange}></input>
+            <input required placeholder='MyUsername' className='login-input' id='loginUsername' value={this.state.username} onChange={this.handleUsernameChange}></input>
             <label className='login-label' htmlFor='loginPassword'>Password</label>
-            <input required className='login-input' type='password' id='loginPassword' value={this.state.password} onChange={this.handlePasswordChange}></input>
+            <input required placeholder='MyPassword' className='login-input' type='password' id='loginPassword' value={this.state.password} onChange={this.handlePasswordChange}></input>
             <div className='login-button-container'>
               <p className={`isvalid-login-${this.state.login}`}>Login Invalid</p>
               <button className='login-button big-button'>Login</button>

@@ -81,7 +81,7 @@
 }
 
 .big-button {
-  font-size: 2rem;
+  font-size: 1rem;
   border: none;
   border-radius: 1rem;
   padding: 0.5rem 1.5rem;
@@ -100,8 +100,290 @@
 
 .header-container {
   background-color: #eafbff;
+  z-index: 2;
+  position: relative;
 }
 
 .home-content-test {
   background-color: #b5b5b5;
+  z-index: 2;
+  position: relative;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+}
+
+.fa-bars {
+  margin-right: 1rem;
+}
+
+.fa-bars:hover {
+  cursor: pointer;
+}
+
+.shadow-true {
+  transition: ease-in 0.3s;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: 100;
+}
+
+.shadow-false {
+  transition: ease-in 0.3s;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.nav-list-container-initial {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  margin-left: -60%;
+}
+
+.nav-list-container-false {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  animation: 0.3s;
+  animation-duration: 0.8s;
+  animation-name: slide-left;
+  margin-left: -60%;
+  margin-top: 0;
+  margin-bottom: 0;
+  z-index: 101;
+  background-color: #eafbff;
+  padding-inline-start: 0;
+  font-size: 2rem;
+}
+
+.nav-list-container-true {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  animation-duration: 0.3s;
+  animation-name: slide-right;
+  z-index: 101;
+  background-color: #eafbff;
+  margin: 0;
+  padding-inline-start: 0;
+  font-size: 2rem;
+}
+
+.nav-link {
+  padding: 1rem 2rem;
+  list-style: none;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+
+.nav-link:hover {
+  cursor: pointer;
+  background-color: #9fb0b4;
+  transition: ease-in-out 0.3s;
+}
+
+.nav-link:visited {
+  color: black;
+}
+
+.content-container {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  margin-left: 0;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.profile-nav {
+  background-color: #f0f0f0;
+  flex-basis: 30%;
+  list-style: none;
+  padding-inline-start: 0;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+  z-index: 3;
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+}
+
+.active-true {
+  background-color: #bfbfbf;
+  border-radius: 1.5rem;
+}
+
+.profile-nav-link {
+  padding: 0.5rem 2rem;
+  text-align: center;
+}
+
+.profile-nav-link:hover {
+  cursor: pointer;
+  background-color: #bfbfbf;
+  transition: ease-in-out 0.3s;
+  border-radius: 1.5rem;
+}
+
+.games-container {
+  margin-top: 0.5rem;
+  flex-basis: 65%;
+}
+
+.game-entry-container {
+  border-radius: 0.25rem;
+  font-size: 2rem;
+  padding: 0.5rem;
+}
+
+.profile-game-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.add-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+  font-size: 2rem;
+}
+
+.add-game-text {
+  margin-bottom: 0;
+}
+
+.profile-nav-line {
+  border: 1px solid #9a9a9a;
+  opacity: 60%;
+  border-style: solid;
+  width: 80%;
+  margin: auto;
+}
+
+.profile-vertical-line {
+  border: 1px solid #9a9a9a;
+  opacity: 60%;
+}
+
+.games-container-line {
+  border: 1px solid #93c0cc;
+  border-style: solid;
+  margin: auto;
+  width: 95%;
+}
+
+.add-game-text:hover {
+  cursor: pointer;
+}
+
+.fa-plus {
+  cursor: pointer;
+}
+
+.newgame-form-true {
+  font-size: 1.5rem;
+  position: absolute;
+  z-index: 101;
+  background-color: #bfbfbf;
+  left: 30%;
+  top: 40%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.newgame-form-false {
+  position: fixed;
+  background-color: #bfbfbf;
+  z-index: 1;
+  left: 40rem;
+  bottom: 200rem;
+}
+
+.newgame-input {
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.newgame-input:focus {
+  outline: 0.15rem solid rgb(100, 100, 100);
+}
+
+.newgame-button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.p-no-margin {
+  margin-top: 0;
+}
+
+.no-games {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.bottom-line {
+  margin-bottom: 1rem;
+}
+
+@keyframes slide-right {
+  from {
+    margin-left: -60%;
+  }
+
+  to {
+    margin-left: 0%;
+  }
+}
+
+@keyframes slide-left {
+  from {
+    margin-left: 0%;
+  }
+
+  to {
+    margin-left: -60%;
+  }
+}
+
+@media screen and (max-width: 923px) {
+  .header-title {
+    font-size: 1.5rem;
+  }
+
+  .big-button {
+    font-size: 1.5rem;
+  }
 }

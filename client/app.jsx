@@ -2,6 +2,9 @@ import React from 'react';
 import Home from './pages/home';
 import Login from './pages/login';
 import Signup from './pages/signup';
+import Friends from './pages/friends';
+import Profile from './pages/profile';
+import Header from './pages/header';
 import parseRoute from './lib/parse-route';
 import UserContext from './lib/user-context';
 import jwtDecode from 'jwt-decode';
@@ -17,23 +20,47 @@ export default class App extends React.Component {
     }
     this.state = {
       route: parseRoute(window.location.hash),
-      user
+      user,
+      token,
+      games: null
     };
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
+    this.handleGetGames = this.handleGetGames.bind(this);
   }
 
   handleSignIn(data) {
     const token = data.token;
     const user = data.user;
-    // console.log('login token', token, 'login user', user);
     localStorage.setItem('token', JSON.stringify(token));
     this.context = user;
+    this.handleGetGames();
   }
 
   handleSignOut() {
     window.localStorage.removeItem('token');
+    if (this.state.route !== '#home') {
+      window.location.hash = '#home';
+    }
     this.setState({ user: null });
+  }
+
+  handleGetGames() {
+    const tokenJSON = localStorage.getItem('token');
+    const token = JSON.parse(tokenJSON);
+    if (token !== null) {
+      fetch('/api/achievements', {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': tokenJSON
+        }
+      })
+        .then(response => response.json()
+          .then(data => {
+            this.setState({ games: data });
+          })
+        );
+    }
   }
 
   componentDidMount() {
@@ -47,17 +74,25 @@ export default class App extends React.Component {
       }
       this.setState({ route });
     });
-    // window.addEventListener('storage', () => {
-    //   const tokenJSON = localStorage.getItem('token');
-    //   const token = JSON.parse(tokenJSON);
-    //   this.setState({ token });
-    //   console.log('storage change');
-    // });
+    const tokenJSON = localStorage.getItem('token');
+    const token = JSON.parse(tokenJSON);
+    if (token !== null) {
+      fetch('/api/achievements', {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': tokenJSON
+        }
+      })
+        .then(response => response.json()
+          .then(data => {
+            this.setState({ games: data });
+          })
+        );
+    }
   }
 
   renderPage() {
     const route = this.state.route;
-    // console.log('route: ', route.path);
     if (route.path === 'login') {
       return <Login />;
     }
@@ -65,14 +100,35 @@ export default class App extends React.Component {
       return <Signup />;
     }
     if (route.path === 'home') {
-      return <Home />;
+      return (
+        <>
+          <Header />
+          <Home />
+        </>
+      );
+    }
+    if (route.path === 'friends') {
+      return (
+        <>
+          <Header />
+          <Friends />
+        </>
+      );
+    }
+    if (route.path === 'profile') {
+      return (
+        <>
+          <Header />
+          <Profile />
+        </>
+      );
     }
   }
 
   render() {
-    const user = this.state.user;
-    const { handleSignIn, handleSignOut } = this;
-    const contextValue = { handleSignIn, handleSignOut, user };
+    const { user, games, token } = this.state;
+    const { handleSignIn, handleSignOut, handleHomeNav, handleFriendsNav, handleProfileNav } = this;
+    const contextValue = { handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
     return (
       <UserContext.Provider value={contextValue}>
         <>
