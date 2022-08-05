@@ -218,23 +218,25 @@
   position: relative;
   z-index: 3;
   margin-bottom: 0;
+  margin-top: 0.5rem;
 }
 
 .profile-nav-link {
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   text-align: center;
-  border-radius: 3rem;
+
+  /* border-radius: 1.5rem; */
 }
 
 .profile-nav-link:hover {
   cursor: pointer;
   background-color: #bfbfbf;
   transition: ease-in-out 0.3s;
-  border-radius: 3rem;
+  border-radius: 1.5rem;
 }
 
 .games-container {
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   flex-basis: 65%;
 }
 
@@ -289,6 +291,59 @@
 
 .fa-plus {
   cursor: pointer;
+}
+
+.newgame-form-true {
+  font-size: 1.5rem;
+  position: absolute;
+  z-index: 101;
+  background-color: #bfbfbf;
+  left: 30%;
+  top: 40%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.newgame-form-false {
+  position: fixed;
+  background-color: #bfbfbf;
+  z-index: 1;
+  left: 40rem;
+  bottom: 200rem;
+}
+
+.newgame-input {
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.newgame-input:focus {
+  outline: 0.15rem solid rgb(100, 100, 100);
+}
+
+.newgame-button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.p-no-margin {
+  margin-top: 0;
+}
+
+.no-games {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.bottom-line {
+  margin-bottom: 1rem;
 }
 
 @keyframes slide-right {

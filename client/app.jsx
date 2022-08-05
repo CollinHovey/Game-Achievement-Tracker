@@ -20,13 +20,15 @@ export default class App extends React.Component {
     this.state = {
       route: parseRoute(window.location.hash),
       user,
-      achievements: null
+      token,
+      games: null
     };
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
     this.handleHomeNav = this.handleHomeNav.bind(this);
     this.handleFriendsNav = this.handleFriendsNav.bind(this);
     this.handleProfileNav = this.handleProfileNav.bind(this);
+    this.handleGetGames = this.handleGetGames.bind(this);
   }
 
   handleSignIn(data) {
@@ -34,6 +36,9 @@ export default class App extends React.Component {
     const user = data.user;
     localStorage.setItem('token', JSON.stringify(token));
     this.context = user;
+    this.handleGetGames();
+    // console.log('user', user);
+    // console.log('token', token);
   }
 
   handleSignOut() {
@@ -67,6 +72,26 @@ export default class App extends React.Component {
     }
   }
 
+  handleGetGames() {
+    const tokenJSON = localStorage.getItem('token');
+    const token = JSON.parse(tokenJSON);
+    if (token !== null) {
+      // console.log('get achievements', token);
+      fetch('/api/achievements', {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': tokenJSON
+        }
+      })
+        .then(response => response.json()
+          .then(data => {
+            this.setState({ games: data });
+            // console.log('fetch games data', data);
+          })
+        );
+    }
+  }
+
   componentDidMount() {
     window.addEventListener('hashchange', () => {
       const route = parseRoute(window.location.hash);
@@ -78,12 +103,23 @@ export default class App extends React.Component {
       }
       this.setState({ route });
     });
-    fetch('/api/achievements')
-      .then(response => response.json()
-        .then(data => {
-          this.setState({ achievements: data });
-        })
-      );
+    const tokenJSON = localStorage.getItem('token');
+    const token = JSON.parse(tokenJSON);
+    if (token !== null) {
+      // console.log('get achievements', token);
+      fetch('/api/achievements', {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': tokenJSON
+        }
+      })
+        .then(response => response.json()
+          .then(data => {
+            this.setState({ games: data });
+            // console.log('fetch games data', data);
+          })
+        );
+    }
   }
 
   renderPage() {
@@ -107,10 +143,10 @@ export default class App extends React.Component {
   }
 
   render() {
-    const user = this.state.user;
+    const { user, games, token } = this.state;
     // console.log('app user', user);
     const { handleSignIn, handleSignOut, handleHomeNav, handleFriendsNav, handleProfileNav } = this;
-    const contextValue = { handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav };
+    const contextValue = { handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
     return (
       <UserContext.Provider value={contextValue}>
         <>

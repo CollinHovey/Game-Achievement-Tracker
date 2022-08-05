@@ -68,11 +68,11 @@ export default class Signup extends React.Component {
         <div className='signup-form-container'>
           <form className='signup-form' onSubmit={this.handleSubmit}>
             <label className='signup-label' htmlFor='signupUsername'>Username</label>
-            <input required className='signup-input' id='signupUsername' value={this.state.username} onChange={this.handleUsernameChange}></input>
+            <input required placeholder='MyUsername' className='signup-input' id='signupUsername' value={this.state.username} onChange={this.handleUsernameChange}></input>
             <label className='signup-label' htmlFor='signupPassword'>Password</label>
-            <input required className='signup-input' type='password' id='signupPassword' value={this.state.password} onChange={this.handlePasswordChange}></input>
+            <input required placeholder='MyPassword' className='signup-input' type='password' id='signupPassword' value={this.state.password} onChange={this.handlePasswordChange}></input>
             <label className='signup-label' htmlFor='email'>Email</label>
-            <input required className='signup-input' type='email' id='email' value={this.state.email} onChange={this.handleEmailChange}></input>
+            <input required placeholder='MyEmail' className='signup-input' type='email' id='email' value={this.state.email} onChange={this.handleEmailChange}></input>
             <div className='signup-button-container'>
               <button className='signup-button big-button'>Sign Up</button>
               <a href='#login' className='login-link'>Already have an account? Login!</a>

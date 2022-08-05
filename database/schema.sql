@@ -41,7 +41,7 @@ CREATE TABLE "games" (
 	"gameId" serial NOT NULL,
 	"gameName" TEXT NOT NULL,
 	"userId" int NOT NULL,
-	"dateCreated" TIMESTAMP NOT NULL,
+	"dateCreated" TIMESTAMP NOT NULL DEFAULT NOW(),
 	CONSTRAINT "games_pk" PRIMARY KEY ("gameId")
 ) WITH (
   OIDS=FALSE

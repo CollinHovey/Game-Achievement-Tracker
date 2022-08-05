@@ -88,6 +88,43 @@ app.post('/api/users/signUp', (req, res, next) => {
 
 app.use(authorizationMiddleware);
 
+app.get('/api/achievements', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+  select "gameId",
+         "gameName",
+         "dateCreated"
+    from "games"
+    where "userId" = $1
+    order by "dateCreated" desc
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      const games = result.rows;
+      res.json(games);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/games', (req, res, next) => {
+  const { userId } = req.user;
+  const { game } = req.body;
+  const params = [game, userId];
+  const sql = `
+  insert into "games" ("gameName", "userId")
+  values ($1, $2)
+  returning *
+  `;
+  db.query(sql, params)
+    .then(result => {
+      const games = result.rows;
+      // console.log('Games', games);
+      res.json(games);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
