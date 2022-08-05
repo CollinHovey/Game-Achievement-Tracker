@@ -15,10 +15,6 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    // console.log('rendered Login');
-  }
-
   handleUsernameChange(event) {
     this.setState({ username: event.target.value });
   }
@@ -43,12 +39,10 @@ class Login extends React.Component {
       .then(response => response.json()
         .then(data => {
           if (!data.error) {
-            // console.log('login succesful', data);
             this.context.handleSignIn(data);
             window.location.hash = '#home';
             return data;
           } else {
-            // console.log('invalid login then');
             this.setState({ login: false });
           }
         }));

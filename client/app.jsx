@@ -4,6 +4,7 @@ import Login from './pages/login';
 import Signup from './pages/signup';
 import Friends from './pages/friends';
 import Profile from './pages/profile';
+import Header from './pages/header';
 import parseRoute from './lib/parse-route';
 import UserContext from './lib/user-context';
 import jwtDecode from 'jwt-decode';
@@ -25,9 +26,6 @@ export default class App extends React.Component {
     };
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
-    this.handleHomeNav = this.handleHomeNav.bind(this);
-    this.handleFriendsNav = this.handleFriendsNav.bind(this);
-    this.handleProfileNav = this.handleProfileNav.bind(this);
     this.handleGetGames = this.handleGetGames.bind(this);
   }
 
@@ -37,8 +35,6 @@ export default class App extends React.Component {
     localStorage.setItem('token', JSON.stringify(token));
     this.context = user;
     this.handleGetGames();
-    // console.log('user', user);
-    // console.log('token', token);
   }
 
   handleSignOut() {
@@ -49,34 +45,10 @@ export default class App extends React.Component {
     this.setState({ user: null });
   }
 
-  handleHomeNav() {
-    // console.log('go to home');
-    window.location.hash = '#home';
-  }
-
-  handleFriendsNav() {
-    // console.log('go to friends');
-    if (!this.state.user.userId) {
-      window.location.hash = '#login';
-    } else {
-      window.location.hash = '#friends';
-    }
-  }
-
-  handleProfileNav() {
-    // console.log('go to profile');
-    if (!this.state.user.userId) {
-      window.location.hash = '#login';
-    } else {
-      window.location.hash = '#profile';
-    }
-  }
-
   handleGetGames() {
     const tokenJSON = localStorage.getItem('token');
     const token = JSON.parse(tokenJSON);
     if (token !== null) {
-      // console.log('get achievements', token);
       fetch('/api/achievements', {
         method: 'GET',
         headers: {
@@ -86,7 +58,6 @@ export default class App extends React.Component {
         .then(response => response.json()
           .then(data => {
             this.setState({ games: data });
-            // console.log('fetch games data', data);
           })
         );
     }
@@ -106,7 +77,6 @@ export default class App extends React.Component {
     const tokenJSON = localStorage.getItem('token');
     const token = JSON.parse(tokenJSON);
     if (token !== null) {
-      // console.log('get achievements', token);
       fetch('/api/achievements', {
         method: 'GET',
         headers: {
@@ -116,7 +86,6 @@ export default class App extends React.Component {
         .then(response => response.json()
           .then(data => {
             this.setState({ games: data });
-            // console.log('fetch games data', data);
           })
         );
     }
@@ -124,7 +93,6 @@ export default class App extends React.Component {
 
   renderPage() {
     const route = this.state.route;
-    // console.log('route: ', route.path);
     if (route.path === 'login') {
       return <Login />;
     }
@@ -132,19 +100,33 @@ export default class App extends React.Component {
       return <Signup />;
     }
     if (route.path === 'home') {
-      return <Home />;
+      return (
+        <>
+          <Header />
+          <Home />
+        </>
+      );
     }
     if (route.path === 'friends') {
-      return <Friends />;
+      return (
+        <>
+          <Header />
+          <Friends />
+        </>
+      );
     }
     if (route.path === 'profile') {
-      return <Profile />;
+      return (
+        <>
+          <Header />
+          <Profile />
+        </>
+      );
     }
   }
 
   render() {
     const { user, games, token } = this.state;
-    // console.log('app user', user);
     const { handleSignIn, handleSignOut, handleHomeNav, handleFriendsNav, handleProfileNav } = this;
     const contextValue = { handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
     return (
