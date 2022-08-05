@@ -2,6 +2,8 @@ import React from 'react';
 import Home from './pages/home';
 import Login from './pages/login';
 import Signup from './pages/signup';
+import Friends from './pages/friends';
+import Profile from './pages/profile';
 import parseRoute from './lib/parse-route';
 import UserContext from './lib/user-context';
 import jwtDecode from 'jwt-decode';
@@ -17,23 +19,52 @@ export default class App extends React.Component {
     }
     this.state = {
       route: parseRoute(window.location.hash),
-      user
+      user,
+      achievements: null
     };
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
+    this.handleHomeNav = this.handleHomeNav.bind(this);
+    this.handleFriendsNav = this.handleFriendsNav.bind(this);
+    this.handleProfileNav = this.handleProfileNav.bind(this);
   }
 
   handleSignIn(data) {
     const token = data.token;
     const user = data.user;
-    // console.log('login token', token, 'login user', user);
     localStorage.setItem('token', JSON.stringify(token));
     this.context = user;
   }
 
   handleSignOut() {
     window.localStorage.removeItem('token');
+    if (this.state.route !== '#home') {
+      window.location.hash = '#home';
+    }
     this.setState({ user: null });
+  }
+
+  handleHomeNav() {
+    // console.log('go to home');
+    window.location.hash = '#home';
+  }
+
+  handleFriendsNav() {
+    // console.log('go to friends');
+    if (!this.state.user.userId) {
+      window.location.hash = '#login';
+    } else {
+      window.location.hash = '#friends';
+    }
+  }
+
+  handleProfileNav() {
+    // console.log('go to profile');
+    if (!this.state.user.userId) {
+      window.location.hash = '#login';
+    } else {
+      window.location.hash = '#profile';
+    }
   }
 
   componentDidMount() {
@@ -47,12 +78,12 @@ export default class App extends React.Component {
       }
       this.setState({ route });
     });
-    // window.addEventListener('storage', () => {
-    //   const tokenJSON = localStorage.getItem('token');
-    //   const token = JSON.parse(tokenJSON);
-    //   this.setState({ token });
-    //   console.log('storage change');
-    // });
+    fetch('/api/achievements')
+      .then(response => response.json()
+        .then(data => {
+          this.setState({ achievements: data });
+        })
+      );
   }
 
   renderPage() {
@@ -67,12 +98,19 @@ export default class App extends React.Component {
     if (route.path === 'home') {
       return <Home />;
     }
+    if (route.path === 'friends') {
+      return <Friends />;
+    }
+    if (route.path === 'profile') {
+      return <Profile />;
+    }
   }
 
   render() {
     const user = this.state.user;
-    const { handleSignIn, handleSignOut } = this;
-    const contextValue = { handleSignIn, handleSignOut, user };
+    // console.log('app user', user);
+    const { handleSignIn, handleSignOut, handleHomeNav, handleFriendsNav, handleProfileNav } = this;
+    const contextValue = { handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav };
     return (
       <UserContext.Provider value={contextValue}>
         <>

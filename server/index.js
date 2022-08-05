@@ -1,4 +1,5 @@
 require('dotenv/config');
+const authorizationMiddleware = require('./authorization-middleware');
 const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const pg = require('pg');
@@ -84,6 +85,8 @@ app.post('/api/users/signUp', (req, res, next) => {
         .catch(err => next(err));
     });
 });
+
+app.use(authorizationMiddleware);
 
 app.use(errorMiddleware);
 
