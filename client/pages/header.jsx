@@ -15,7 +15,7 @@ export default class Header extends React.Component {
   componentDidMount() {
     window.addEventListener('hashchange', () => {
       this.setState({
-        navOpen: false,
+        navOpen: 'initial',
         shadowOn: false
       });
     });
