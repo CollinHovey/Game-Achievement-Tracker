@@ -10,7 +10,6 @@ export default class Home extends React.Component {
   }
 
   render() {
-    // console.log('home context', this.context);
     if (this.context.user !== null) {
       return (
         <>

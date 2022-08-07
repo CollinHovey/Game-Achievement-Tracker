@@ -15,12 +15,6 @@ export default class HomeLoggedOut extends React.Component {
   render() {
     return (
       <>
-        <div className='header-container'>
-          <div className='nav-container'>
-            <h1 className='header-title'>Hello Guest!</h1>
-          </div>
-          <button className='logout-button big-button' onClick={this.login}>Login</button>
-        </div>
       </>
     );
   }

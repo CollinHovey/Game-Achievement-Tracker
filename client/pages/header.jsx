@@ -37,6 +37,12 @@ export default class Header extends React.Component {
 
   render() {
     const { handleSignOut } = this.context;
+    let headerTitle = 'Welcome Guest!';
+    let button = <a href='#login' id='login-button' className='big-button'>Login</a>;
+    if (this.context.user !== null) {
+      headerTitle = this.context.user.username;
+      button = <button className='logout-button big-button' onClick={handleSignOut}>Log Out</button>;
+    }
     return (
       <>
         <ul className={`nav-list-container-${this.state.navOpen}`}>
@@ -49,9 +55,9 @@ export default class Header extends React.Component {
         <div className='header-container'>
           <div className='nav-container'>
             <i className="fa-solid fa-bars fa-2x" onClick={this.handleOpenNav}></i>
-            <h1 className='header-title'>{this.context.user.username}</h1>
+            <h1 className='header-title'>{headerTitle}</h1>
           </div>
-          <button className='logout-button big-button' onClick={handleSignOut}>Log Out</button>
+          {button}
         </div>
       </>
     );

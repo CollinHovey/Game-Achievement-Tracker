@@ -21,7 +21,7 @@ CREATE TABLE "posts" (
 	"topic" TEXT NOT NULL,
 	"caption" TEXT NOT NULL,
 	"userId" int NOT NULL,
-	"datecreated" timestamp with time zone NOT NULL,
+	"datecreated" TIMESTAMP NOT NULL DEFAULT NOW(),
 	CONSTRAINT "posts_pk" PRIMARY KEY ("postId")
 ) WITH (
   OIDS=FALSE
@@ -52,7 +52,7 @@ CREATE TABLE "achievements" (
 	"name" TEXT NOT NULL,
 	"description" TEXT NOT NULL,
 	"gameId" int NOT NULL,
-	"dateCreated" TIMESTAMP NOT NULL,
+	"dateCreated" TIMESTAMP NOT NULL DEFAULT NOW(),
 	CONSTRAINT "achievements_pk" PRIMARY KEY ("achievementId")
 ) WITH (
   OIDS=FALSE
