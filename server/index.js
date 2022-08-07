@@ -147,9 +147,13 @@ app.post('/api/games', (req, res, next) => {
   `;
   db.query(sql, params)
     .then(result => {
-      const games = result.rows[0];
-      // console.log('Games', games);
-      res.json(games);
+      const game = result.rows[0];
+      const newGame = {
+        gameId: game.gameId,
+        gameName: game.gameName,
+        gameDate: game.dateCreated
+      };
+      res.json(newGame);
     })
     .catch(err => next(err));
 });
