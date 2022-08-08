@@ -29,10 +29,12 @@ export default class Header extends React.Component {
   }
 
   handleCloseNav() {
-    this.setState({
-      navOpen: false,
-      shadowOn: false
-    });
+    if (this.state.navOpen === true) {
+      this.setState({
+        navOpen: false,
+        shadowOn: false
+      });
+    }
   }
 
   render() {
