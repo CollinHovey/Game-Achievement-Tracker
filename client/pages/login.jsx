@@ -62,7 +62,7 @@ class Login extends React.Component {
             <input required placeholder='MyPassword' className='login-input' type='password' id='loginPassword' value={this.state.password} onChange={this.handlePasswordChange}></input>
             <div className='login-button-container'>
               <p className={`isvalid-login-${this.state.login}`}>Login Invalid</p>
-              <button className='login-button big-button'>Login</button>
+              <button id='login-button' className='big-button'>Login</button>
               <a href='#signup' className='signup-link'>{'Don\'t have and account? Sign up now!'}</a>
             </div>
           </form>

@@ -33,16 +33,22 @@ export default class App extends React.Component {
     const token = data.token;
     const user = data.user;
     localStorage.setItem('token', JSON.stringify(token));
-    this.context = user;
+    this.setState({
+      user,
+      token
+    });
     this.handleGetGames();
   }
 
   handleSignOut() {
     window.localStorage.removeItem('token');
+    this.setState({
+      user: null,
+      token: null
+    });
     if (this.state.route !== '#home') {
       window.location.hash = '#home';
     }
-    this.setState({ user: null });
   }
 
   handleGetGames() {
