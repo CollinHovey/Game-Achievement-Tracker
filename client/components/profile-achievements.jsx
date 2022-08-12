@@ -8,6 +8,9 @@ export default class ProfileAchievements extends React.Component {
       shadowOn: false,
       gameOn: false,
       achOn: false,
+      deleteOn: false,
+      deleteContent: '',
+      deleteType: null,
       newGame: '',
       newAchievement: '',
       achDetails: '',
@@ -27,6 +30,113 @@ export default class ProfileAchievements extends React.Component {
     this.handleSubmitAchievement = this.handleSubmitAchievement.bind(this);
     this.handleEditGamePopup = this.handleEditGamePopup.bind(this);
     this.handleEditAchievementPopup = this.handleEditAchievementPopup.bind(this);
+    this.handleDeleteGamePopup = this.handleDeleteGamePopup.bind(this);
+    this.handleDeleteAchievementPopup = this.handleDeleteAchievementPopup.bind(this);
+    this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
+  }
+
+  handleDeleteAchievementPopup(gameId, gameIndex, achievementId, achievementIndex, achName, achDetails) {
+    const achievementDelete = <div className='delete-content-container'>
+      <p>{achName}</p>
+      <p>{achDetails}</p>
+    </div>;
+    this.setState({
+      deleteOn: true,
+      shadowOn: true,
+      deleteType: 'achievement',
+      gameId,
+      index: gameIndex,
+      achId: achievementId,
+      achIndex: achievementIndex,
+      deleteContent: achievementDelete
+    });
+  }
+
+  handleDeleteGamePopup(gameId, index, gameName) {
+    const gameDelete = <div className='delete-content-container'>
+      <p>{gameName}</p>
+      <p>And All Achievements</p>
+      </div>;
+    this.setState({
+      deleteOn: true,
+      shadowOn: true,
+      deleteType: 'game',
+      gameId,
+      index,
+      deleteContent: gameDelete
+    });
+  }
+
+  handleDeleteSubmit() {
+    const token = this.context.token;
+    const tokenJSON = JSON.stringify(token);
+    const games = this.context.games;
+    if (this.state.deleteType === 'game') {
+      const deleteGame = {
+        game: this.state.gameId
+      };
+      const index = this.state.index;
+      fetch('/api/games', {
+        method: 'DELETE',
+        headers: {
+          'X-Access-Token': tokenJSON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(deleteGame)
+      })
+        .then(response => response.json()
+          .then(data => {
+            const newGames = games.slice();
+            newGames.splice(index, 1);
+            this.context.games = newGames;
+            this.setState({
+              gameId: null,
+              index: null
+            });
+          })
+        );
+      this.setState({
+        shadowOn: !this.state.shadowOn,
+        deleteOn: false,
+        deleteType: null,
+        deleteContent: ''
+      });
+    }
+    if (this.state.deleteType === 'achievement') {
+      const deleteAchievement = {
+        game: this.state.gameId,
+        achievement: this.state.achId
+      };
+      const gameIndex = this.state.index;
+      const achIndex = this.state.achIndex;
+      fetch('/api/achievements', {
+        method: 'DELETE',
+        headers: {
+          'X-Access-Token': tokenJSON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(deleteAchievement)
+      })
+        .then(response => response.json()
+          .then(data => {
+            const newGames = games.slice();
+            newGames[gameIndex].achievements.splice(achIndex, 1);
+            this.context.games = newGames;
+            this.setState({
+              gameId: null,
+              index: null
+            });
+          })
+        );
+      this.setState({
+        shadowOn: !this.state.shadowOn,
+        deleteOn: false,
+        deleteType: null,
+        deleteContent: '',
+        achId: null,
+        achIndex: null
+      });
+    }
   }
 
   handleAchievementNameChange(event) {
@@ -190,6 +300,9 @@ export default class ProfileAchievements extends React.Component {
       achDetails: '',
       gameOn: false,
       achOn: false,
+      deleteOn: false,
+      deleteType: '',
+      deleteContent: '',
       index: null,
       gameId: null,
       submitType: null
@@ -289,7 +402,10 @@ export default class ProfileAchievements extends React.Component {
                 <div className='achievement-content-container'>
                   <p className='achievement-title'>{achievements.achievementName}</p>
                   <p className='achievement-detail'>{achievements.achievementDescription}</p>
-                  <i className="fa-solid fa-pencil edit-achievement-pencil" onClick={() => this.handleEditAchievementPopup(game.gameId, index, achievements.achievementId, indexAchievements, achievements.achievementName, achievements.achievementDescription)}></i>
+                  <div className='achievement-edit-container'>
+                    <i className="fa-solid fa-pencil edit-achievement-pencil" onClick={() => this.handleEditAchievementPopup(game.gameId, index, achievements.achievementId, indexAchievements, achievements.achievementName, achievements.achievementDescription)}></i>
+                    <i className="fa-solid fa-trash achievement-delete" onClick={() => this.handleDeleteAchievementPopup(game.gameId, index, achievements.achievementId, indexAchievements, achievements.achievementName, achievements.achievementDescription)}></i>
+                  </div>
                 </div>
               </div>
             );
@@ -300,7 +416,10 @@ export default class ProfileAchievements extends React.Component {
             <hr className='games-container-line'></hr>
             <div className='game-entry-container'>
               <p className='profile-game-title'>{game.gameName}</p>
-              <i className="fa-solid fa-pencil edit-game-pencil" onClick={() => this.handleEditGamePopup(game.gameId, index, game.gameName)}></i>
+              <div className='game-edit-container'>
+                <i className="fa-solid fa-pencil edit-game-pencil" onClick={() => this.handleEditGamePopup(game.gameId, index, game.gameName)}></i>
+                <i className="fa-solid fa-trash game-delete" onClick={() => this.handleDeleteGamePopup(game.gameId, index, game.gameName)}></i>
+              </div>
             </div>
             <div className='achievements-container'>
               {achievementList}
@@ -308,7 +427,7 @@ export default class ProfileAchievements extends React.Component {
             </div>
             <div className='add-achievement-container'>
               <p className='add-achievement-text' onClick={() => this.handleNewAchievementPopup(game.gameId, index)}>Add New Achievement</p>
-              <i className="fa-solid fa-plus" onClick={() => this.handleNewAchievementPopup(game.gameId, index)}></i>
+              <i className="fa-solid fa-plus add-achievement-plus" onClick={() => this.handleNewAchievementPopup(game.gameId, index)}></i>
             </div>
             <hr className='games-container-line bottom-line'></hr>
           </div>
@@ -339,13 +458,23 @@ export default class ProfileAchievements extends React.Component {
             </div>
           </form>
         </div>
+        <div>
+          <form className={`delete-item-${this.state.deleteOn}`}>
+            <p className='delete-text'>Delete</p>
+            {this.state.deleteContent}
+            <div className='delete-button-container'>
+              <button className='big-button' onClick={this.handleDeleteSubmit}>Delete</button>
+              <button className='big-button' onClick={this.handleCancel}>Cancel</button>
+            </div>
+          </form>
+        </div>
         <div className={`shadow-${this.state.shadowOn}`} onClick={this.handleCancel}></div>
         <div className='content-container'>
           <div className='games-container'>
             {gamesList}
             <div className='add-game-container'>
               <p className='add-game-text' onClick={this.handleNewGamePopup}>Add New Game</p>
-              <i className="fa-solid fa-plus fa-2x" onClick={this.handleNewGamePopup}></i>
+              <i className="fa-solid fa-plus fa-2x add-game-plus" onClick={this.handleNewGamePopup}></i>
             </div>
           </div>
         </div>

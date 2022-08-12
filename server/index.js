@@ -215,6 +215,56 @@ app.patch('/api/achievements', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.delete('/api/games', (req, res, next) => {
+  const { game } = req.body;
+  const params = [game];
+  const sql1 = `
+  delete from "games"
+    where "gameId" = $1
+    returning *
+  `;
+  const sql2 = `
+  delete from "achievements"
+    where "gameId" = $1
+    returning *
+  `;
+  db.query(sql2, params)
+    .then(result => {
+      const deletedAchievements = result.rows;
+      db.query(sql1, params)
+        .then(result2 => {
+          const deletedGame = result.rows[0];
+          const data = {
+            game: deletedGame,
+            achievements: deletedAchievements
+          };
+          res.json(data);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+app.delete('/api/achievements', (req, res, next) => {
+  const { game, achievement } = req.body;
+  const params = [game, achievement];
+  const sql = `
+  delete from "achievements"
+    where "gameId" = $1
+    and "achievementId" = $2
+    returning *
+  `;
+  db.query(sql, params)
+    .then(result => {
+      const deletedAch = result.rows[0];
+      const data = {
+        achievement: deletedAch
+      };
+      res.json(data);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

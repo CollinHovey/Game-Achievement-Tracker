@@ -289,7 +289,8 @@
 }
 
 .add-game-text {
-  margin-bottom: 0;
+  margin-bottom: 1rem;
+  color: black;
 }
 
 .profile-nav-line {
@@ -314,6 +315,7 @@
 
 .add-game-text:hover {
   cursor: pointer;
+  color: #5b7881;
 }
 
 .fa-plus {
@@ -400,12 +402,32 @@
   width: 100%;
 }
 
+.add-game-plus {
+  color: black;
+}
+
+.add-game-plus:hover {
+  cursor: pointer;
+  color: #5b7881;
+}
+
 .add-achievement-text {
   font-size: 1rem;
+  color: black;
 }
 
 .add-achievement-text:hover {
   cursor: pointer;
+  color: #5b7881;
+}
+
+.add-achievement-plus {
+  color: black;
+}
+
+.add-achievement-plus:hover {
+  cursor: pointer;
+  color: #5b7881;
 }
 
 .add-achievement-container {
@@ -439,8 +461,23 @@
   align-items: center;
 }
 
-.edit-game-pencil,
+.achievement-title,
+.achievement-detail,
+.achievement-edit-container {
+  flex-basis: 33%;
+  text-align: center;
+}
+
+.achievement-edit-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .edit-achievement-pencil {
+  color: #93c0cc;
+}
+
+.edit-game-pencil {
   margin-right: 2rem;
   color: #93c0cc;
 }
@@ -449,6 +486,51 @@
 .edit-achievement-pencil:hover {
   cursor: pointer;
   color: #5b7881;
+}
+
+.game-delete {
+  margin-right: 2rem;
+}
+
+.game-delete,
+.achievement-delete {
+  color: #93c0cc;
+}
+
+.game-delete:hover,
+.achievement-delete:hover {
+  cursor: pointer;
+  color: #5b7881;
+}
+
+.delete-item-false {
+  position: fixed;
+  background-color: #bfbfbf;
+  z-index: 1;
+  left: 40rem;
+  bottom: 200rem;
+}
+
+.delete-item-true {
+  font-size: 1.5rem;
+  position: fixed;
+  z-index: 101;
+  background-color: #bfbfbf;
+  left: 40%;
+  top: 30%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.delete-content-container {
+  text-align: center;
+}
+
+.delete-text {
+  margin-bottom: 0;
 }
 
 @keyframes slide-right {
@@ -481,7 +563,15 @@
   }
 
   .newgame-form-true {
-    left: 10%;
+    left: 15%;
+  }
+
+  .newachievement-form-true {
+    left: 15%;
+  }
+
+  .delete-item-true {
+    left: 25%;
   }
 
   .profile-game-title {
