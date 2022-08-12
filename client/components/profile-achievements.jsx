@@ -12,7 +12,10 @@ export default class ProfileAchievements extends React.Component {
       newAchievement: '',
       achDetails: '',
       gameId: null,
-      index: null
+      index: null,
+      submitType: null,
+      achId: null,
+      achIndex: null
     };
     this.handleNewGamePopup = this.handleNewGamePopup.bind(this);
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
@@ -22,6 +25,8 @@ export default class ProfileAchievements extends React.Component {
     this.handleAchievementDetailChange = this.handleAchievementDetailChange.bind(this);
     this.handleNewAchievementPopup = this.handleNewAchievementPopup.bind(this);
     this.handleSubmitAchievement = this.handleSubmitAchievement.bind(this);
+    this.handleEditGamePopup = this.handleEditGamePopup.bind(this);
+    this.handleEditAchievementPopup = this.handleEditAchievementPopup.bind(this);
   }
 
   handleAchievementNameChange(event) {
@@ -37,12 +42,28 @@ export default class ProfileAchievements extends React.Component {
       shadowOn: !this.state.shadowOn,
       achOn: !this.state.achOn,
       gameId,
-      index
+      index,
+      submitType: 'post'
+    });
+  }
+
+  handleEditAchievementPopup(gameId, gameIndex, achievementId, achievementIndex, achName, achDetails) {
+    this.setState({
+      shadowOn: !this.state.shadowOn,
+      achOn: !this.state.achOn,
+      gameId,
+      index: gameIndex,
+      submitType: 'patch',
+      newAchievement: achName,
+      achDetails,
+      achId: achievementId,
+      achIndex: achievementIndex
     });
   }
 
   handleSubmitAchievement(event) {
     event.preventDefault();
+    const request = this.state.submitType;
     const token = this.context.token;
     const tokenJSON = JSON.stringify(token);
     const newData = {
@@ -51,45 +72,108 @@ export default class ProfileAchievements extends React.Component {
       achDetails: this.state.achDetails
     };
     const games = this.context.games;
-    fetch('/api/achievements', {
-      method: 'POST',
-      headers: {
-        'X-Access-Token': tokenJSON,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newData)
-    })
-      .then(response => response.json()
-        .then(data => {
-          const newAchievement = {
-            achievementId: data.achievementId,
-            achievementName: data.name,
-            achievementDescription: data.description,
-            achievementDate: data.dateCreated
-          };
-          const newGames = games.slice();
-          newGames[this.state.index].achievements.unshift(newAchievement);
-          this.context.games = newGames;
-          this.setState({
-            gameId: null,
-            index: null,
-            newAchievement: '',
-            achDetails: ''
-          });
-        })
-      );
-    this.setState({
-      shadowOn: !this.state.shadowOn,
-      newAchievement: '',
-      achDetails: '',
-      achOn: false
-    });
+    if (request === 'post') {
+      fetch('/api/achievements', {
+        method: 'POST',
+        headers: {
+          'X-Access-Token': tokenJSON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newData)
+      })
+        .then(response => response.json()
+          .then(data => {
+            const newAchievement = {
+              achievementId: data.achievementId,
+              achievementName: data.name,
+              achievementDescription: data.description,
+              achievementDate: data.dateCreated
+            };
+            const newGames = games.slice();
+            newGames[this.state.index].achievements.unshift(newAchievement);
+            this.context.games = newGames;
+            this.setState({
+              gameId: null,
+              index: null,
+              newAchievement: '',
+              achDetails: ''
+            });
+          })
+        );
+      this.setState({
+        shadowOn: !this.state.shadowOn,
+        achOn: false,
+        submitType: null,
+        achId: null,
+        achIndex: null
+      });
+    }
+    if (request === 'patch') {
+      const index = this.state.index;
+      const achIndex = this.state.achIndex;
+      if (this.state.newAchievement === games[index].achievements[achIndex].achievementName && this.state.achDetails === games[index].achievements[achIndex].achievementDescription) {
+        this.setState({
+          shadowOn: !this.state.shadowOn,
+          newAchievement: '',
+          achDetails: '',
+          achOn: false,
+          index: null,
+          gameId: null,
+          submitType: null,
+          achId: null,
+          achIndex: null
+        });
+        return;
+      }
+      newData.achievementId = this.state.achId;
+      fetch('/api/achievements', {
+        method: 'PATCH',
+        headers: {
+          'X-Access-Token': tokenJSON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newData)
+      })
+        .then(response => response.json()
+          .then(data => {
+            const newGames = games.slice();
+            newGames[index].achievements[achIndex].achievementName = data.name;
+            newGames[index].achievements[achIndex].achievementDescription = data.description;
+            this.context.games = newGames;
+            this.setState({
+              gameId: null,
+              index: null,
+              newAchievement: '',
+              achDetails: ''
+            });
+          })
+        );
+      this.setState({
+        shadowOn: !this.state.shadowOn,
+        achOn: false,
+        submitType: null,
+        achId: null,
+        achIndex: null
+      });
+    }
   }
 
   handleNewGamePopup() {
     this.setState({
       shadowOn: !this.state.shadowOn,
-      gameOn: !this.state.gameOn
+      gameOn: !this.state.gameOn,
+      submitType: 'post'
+    });
+  }
+
+  handleEditGamePopup(gameId, index, gameName) {
+    this.setState({
+      shadowOn: !this.state.shadowOn,
+      gameOn: !this.state.gameOn,
+      newGame: gameName,
+      gameId,
+      index,
+      submitType: 'patch'
     });
   }
 
@@ -107,38 +191,88 @@ export default class ProfileAchievements extends React.Component {
       gameOn: false,
       achOn: false,
       index: null,
-      gameId: null
+      gameId: null,
+      submitType: null
     });
   }
 
   handleSubmitGame(event) {
+    event.preventDefault();
+    const request = this.state.submitType;
     const token = this.context.token;
     const tokenJSON = JSON.stringify(token);
     const gameName = { game: this.state.newGame };
     const games = this.context.games;
-    event.preventDefault();
-    fetch('/api/games', {
-      method: 'POST',
-      headers: {
-        'X-Access-Token': tokenJSON,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(gameName)
-    })
-      .then(response => response.json()
-        .then(data => {
-          const newGames = games.slice();
-          data.achievements = [];
-          newGames.unshift(data);
-          this.context.games = newGames;
-          this.setState({ newGame: '' });
-        })
-      );
-    this.setState({
-      shadowOn: !this.state.shadowOn,
-      newGame: '',
-      gameOn: false
-    });
+    if (request === 'post') {
+      fetch('/api/games', {
+        method: 'POST',
+        headers: {
+          'X-Access-Token': tokenJSON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(gameName)
+      })
+        .then(response => response.json()
+          .then(data => {
+            const newGames = games.slice();
+            data.achievements = [];
+            newGames.unshift(data);
+            this.context.games = newGames;
+            this.setState({ newGame: '' });
+          })
+        );
+      this.setState({
+        shadowOn: !this.state.shadowOn,
+        gameOn: false,
+        gameId: null,
+        index: null,
+        submitType: null
+      });
+    }
+    const index = this.state.index;
+    if (request === 'patch') {
+      if (this.state.newGame === games[index].gameName) {
+        this.setState({
+          shadowOn: !this.state.shadowOn,
+          newGame: '',
+          newAchievement: '',
+          achDetails: '',
+          gameOn: false,
+          achOn: false,
+          index: null,
+          gameId: null,
+          submitType: null
+        });
+        return;
+      }
+      const game = {
+        game: this.state.newGame,
+        gameId: this.state.gameId
+      };
+      fetch('/api/games', {
+        method: 'PATCH',
+        headers: {
+          'X-Access-Token': tokenJSON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(game)
+      })
+        .then(response => response.json()
+          .then(data => {
+            const newGames = games.slice();
+            newGames[index].gameName = data.gameName;
+            this.context.games = newGames;
+            this.setState({ newGame: '' });
+          })
+        );
+      this.setState({
+        shadowOn: !this.state.shadowOn,
+        gameOn: false,
+        index: null,
+        gameId: null,
+        submitType: null
+      });
+    }
   }
 
   render() {
@@ -155,6 +289,7 @@ export default class ProfileAchievements extends React.Component {
                 <div className='achievement-content-container'>
                   <p className='achievement-title'>{achievements.achievementName}</p>
                   <p className='achievement-detail'>{achievements.achievementDescription}</p>
+                  <i className="fa-solid fa-pencil edit-achievement-pencil" onClick={() => this.handleEditAchievementPopup(game.gameId, index, achievements.achievementId, indexAchievements, achievements.achievementName, achievements.achievementDescription)}></i>
                 </div>
               </div>
             );
@@ -165,6 +300,7 @@ export default class ProfileAchievements extends React.Component {
             <hr className='games-container-line'></hr>
             <div className='game-entry-container'>
               <p className='profile-game-title'>{game.gameName}</p>
+              <i className="fa-solid fa-pencil edit-game-pencil" onClick={() => this.handleEditGamePopup(game.gameId, index, game.gameName)}></i>
             </div>
             <div className='achievements-container'>
               {achievementList}

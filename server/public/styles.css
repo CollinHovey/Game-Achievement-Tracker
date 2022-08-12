@@ -269,6 +269,8 @@
   border-radius: 0.25rem;
   font-size: 2rem;
   padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .profile-game-title {
@@ -434,6 +436,19 @@
 .achievement-content-container {
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
+}
+
+.edit-game-pencil,
+.edit-achievement-pencil {
+  margin-right: 2rem;
+  color: #93c0cc;
+}
+
+.edit-game-pencil:hover,
+.edit-achievement-pencil:hover {
+  cursor: pointer;
+  color: #5b7881;
 }
 
 @keyframes slide-right {
@@ -471,5 +486,9 @@
 
   .profile-game-title {
     text-align: center;
+  }
+
+  .profile-nav-link {
+    font-size: 1rem;
   }
 }

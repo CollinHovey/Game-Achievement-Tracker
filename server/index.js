@@ -158,12 +158,53 @@ app.post('/api/games', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.patch('/api/games', (req, res, next) => {
+  const { userId } = req.user;
+  const { game, gameId } = req.body;
+  const params = [game, gameId, userId];
+  const sql = `
+  update "games"
+     set "gameName" = $1
+     where "userId" = $3
+     and "gameId" = $2
+     returning *
+  `;
+  db.query(sql, params)
+    .then(result => {
+      const game = result.rows[0];
+      const newGame = {
+        gameName: game.gameName
+      };
+      res.json(newGame);
+    })
+    .catch(err => next(err));
+});
+
 app.post('/api/achievements', (req, res, next) => {
   const { achName, achDetails, gameId } = req.body;
   const params = [achName, achDetails, gameId];
   const sql = `
   insert into "achievements" ("name", "description", "gameId")
   values ($1, $2, $3)
+  returning *
+  `;
+  db.query(sql, params)
+    .then(result => {
+      const newAch = result.rows[0];
+      res.json(newAch);
+    })
+    .catch(err => next(err));
+});
+
+app.patch('/api/achievements', (req, res, next) => {
+  const { achName, achDetails, gameId, achievementId } = req.body;
+  const params = [achName, achDetails, gameId, achievementId];
+  const sql = `
+  update "achievements"
+     set "name" = $1,
+         "description" = $2
+     where "achievementId" = $4
+     and "gameId" = $3
   returning *
   `;
   db.query(sql, params)
