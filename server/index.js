@@ -84,17 +84,29 @@ app.post('/api/users/signUp', (req, res, next) => {
 });
 
 app.get('/api/posts', (req, res, next) => {
+  // select "p"."postId",
+  //   "p"."topic",
+  //     "p"."caption",
+  //       "p"."userId",
+  //         "u"."username",
+  //           "p"."datecreated"
+  //     from "posts" as "p"
+  //     join "users" as "u" using("userId")
+  //     order by "p"."datecreated" desc
   const sql = `
   select "p"."postId",
          "p"."topic",
          "p"."caption",
          "p"."userId",
-         "u"."username",
-         "p"."datecreated"
-      from "posts" as "p"
-      join "users" as "u" using ("userId")
-      order by "p"."datecreated" desc
+         (select "username" from "users" where "userId" = "p"."userId"),
+         "p"."datecreated",
+         count("l"."userId") as "likes"
+    from "posts" as "p"
+    left join "likes" as "l" using("postId")
+    group by "p"."postId"
+    order by "p"."datecreated" desc
   `;
+
   db.query(sql)
     .then(result => {
       const posts = result.rows;

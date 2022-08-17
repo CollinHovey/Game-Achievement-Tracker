@@ -9,7 +9,10 @@ export default class HomeLoggedIn extends React.Component {
       shadowOn: false,
       topic: '',
       detail: '',
-      posts: null
+      posts: null,
+      searchPosts: null,
+      searchEnter: '',
+      search: ''
     };
     this.handleCancel = this.handleCancel.bind(this);
     this.handleNewPostPopup = this.handleNewPostPopup.bind(this);
@@ -17,6 +20,9 @@ export default class HomeLoggedIn extends React.Component {
     this.handleTopicChange = this.handleTopicChange.bind(this);
     this.handleDetailChange = this.handleDetailChange.bind(this);
     this.handleSubmitPost = this.handleSubmitPost.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleChangeSearch = this.handleChangeSearch.bind(this);
+    this.handleEndSearch = this.handleEndSearch.bind(this);
   }
 
   componentDidMount() {
@@ -49,6 +55,35 @@ export default class HomeLoggedIn extends React.Component {
 
   handleDetailChange(event) {
     this.setState({ detail: event.target.value });
+  }
+
+  handleSearch(event) {
+    if (event.charCode === 13) {
+      const posts = this.state.posts;
+      const search = this.state.search;
+      const searchPosts = [];
+      for (let x = 0; x < posts.length; x++) {
+        if (posts[x].topic === search) {
+          searchPosts.push(posts[x]);
+        }
+      }
+      this.setState({
+        searchPosts,
+        searchEnter: search
+      });
+    }
+  }
+
+  handleEndSearch() {
+    this.setState({
+      searchPosts: null,
+      searchEnter: '',
+      search: ''
+    });
+  }
+
+  handleChangeSearch(event) {
+    this.setState({ search: event.target.value });
   }
 
   handleSubmitPost(event) {
@@ -90,7 +125,18 @@ export default class HomeLoggedIn extends React.Component {
 
   render() {
     let postsList = <h1>Loading Posts</h1>;
-    const posts = this.state.posts;
+    let posts = this.state.posts;
+    let cancelSearch = <div></div>;
+    if (this.state.searchPosts !== null) {
+      posts = this.state.searchPosts;
+      cancelSearch = <>
+        <div className='cancel-search-container'>
+          <h1 className='cancel-search-button' onClick={this.handleEndSearch}>{this.state.searchEnter} <i className="fa-solid fa-x cancel-search-x"></i></h1>
+          <h1 className='search-results-count'>{posts.length} result(s)</h1>
+        </div>
+        <hr className='post-line'></hr>
+      </>;
+    }
     if (this.state.posts !== null) {
       postsList = posts.map((post, index) => {
         return (
@@ -125,9 +171,10 @@ export default class HomeLoggedIn extends React.Component {
         <div className={`shadow-${this.state.shadowOn}`} onClick={this.handleCancel}></div>
         <div className='post-list'>
           <div className='home-logged-in-header-container'>
-            <input className='search-input' placeholder='Search'></input>
+            <input className='search-input' placeholder='Search' onKeyPress={this.handleSearch} value={this.state.search} onChange={this.handleChangeSearch}></input>
             <button className='new-post-button' onClick={this.handleNewPostPopup}>New Post</button>
           </div>
+          {cancelSearch}
           {postsList}
         </div>
       </>
