@@ -115,6 +115,7 @@
   background-color: #eafbff;
   z-index: 2;
   position: relative;
+  border-bottom: 2px solid #93c0cc;
 }
 
 .home-content-test {
@@ -269,15 +270,15 @@
   border-radius: 0.25rem;
   font-size: 2rem;
   padding: 0.5rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .profile-game-title {
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin: 0;
 }
 
 .add-game-container {
@@ -311,9 +312,11 @@
   border-style: solid;
   margin: auto;
   width: 95%;
+  opacity: 0.7;
 }
 
 .add-game-text:hover {
+  transition: ease-in-out 0.2s;
   cursor: pointer;
   color: #5b7881;
 }
@@ -326,7 +329,8 @@
   font-size: 1.5rem;
   position: fixed;
   z-index: 101;
-  background-color: #bfbfbf;
+  background-color: #b5dce6;
+  border-radius: 1rem;
   left: 33%;
   top: 30%;
   padding: 1rem;
@@ -337,7 +341,7 @@
 
 .newgame-form-false {
   position: fixed;
-  background-color: #bfbfbf;
+  background-color: #b5dce6;
   z-index: 1;
   left: 40rem;
   bottom: 200rem;
@@ -364,7 +368,8 @@
 
 .newachievement-form-false {
   position: fixed;
-  background-color: #bfbfbf;
+  background-color: #b5dce6;
+  border-radius: 1rem;
   z-index: 1;
   left: 40rem;
   bottom: 200rem;
@@ -374,7 +379,8 @@
   font-size: 1.5rem;
   position: fixed;
   z-index: 101;
-  background-color: #bfbfbf;
+  background-color: #b5dce6;
+  border-radius: 1rem;
   left: 33%;
   top: 30%;
   padding: 1rem;
@@ -409,6 +415,7 @@
 .add-game-plus:hover {
   cursor: pointer;
   color: #5b7881;
+  transition: ease-in-out 0.2s;
 }
 
 .add-achievement-text {
@@ -419,6 +426,7 @@
 .add-achievement-text:hover {
   cursor: pointer;
   color: #5b7881;
+  transition: ease-in-out 0.2s;
 }
 
 .add-achievement-plus {
@@ -428,6 +436,7 @@
 .add-achievement-plus:hover {
   cursor: pointer;
   color: #5b7881;
+  transition: ease-in-out 0.2s;
 }
 
 .add-achievement-container {
@@ -435,6 +444,11 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.achievement-container-line {
+  border: 1px solid #b5dce6;
+  opacity: 0.6;
 }
 
 .p-no-margin {
@@ -485,6 +499,7 @@
 .edit-game-pencil:hover,
 .edit-achievement-pencil:hover {
   cursor: pointer;
+  transition: ease-in-out 0.2s;
   color: #5b7881;
 }
 
@@ -501,6 +516,7 @@
 .achievement-delete:hover {
   cursor: pointer;
   color: #5b7881;
+  transition: ease-in-out 0.2s;
 }
 
 .delete-item-false {
@@ -531,6 +547,136 @@
 
 .delete-text {
   margin-bottom: 0;
+}
+
+.new-post-button {
+  font-size: 1rem;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  transition: ease-in-out 0.2s;
+  background-color: #9edeec;
+}
+
+.new-post-button:hover {
+  transition: ease-in-out 0.2s;
+  cursor: pointer;
+  background-color: #78adb9;
+}
+
+.post-list {
+  position: relative;
+  z-index: 3;
+}
+
+.home-logged-in-header-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 3rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 5px 5px 15px 0 rgb(0, 0, 0, 0.2);
+  width: 60%;
+}
+
+.search-input:focus {
+  outline: 0.15rem solid #78adb9;
+}
+
+.newpost-form-true {
+  font-size: 1.5rem;
+  position: fixed;
+  z-index: 101;
+  background-color: #b5dce6;
+  border-radius: 1rem;
+  left: 15%;
+  top: 10%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.newpost-form-false {
+  position: fixed;
+  background-color: #b5dce6;
+  border-radius: 1rem;
+  z-index: 1;
+  left: 40rem;
+  bottom: 200rem;
+}
+
+.newpost-input {
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 5px 5px 15px 0 rgb(0, 0, 0, 0.3);
+  margin-bottom: 2rem;
+}
+
+.newpost-input:focus {
+  outline: 0.15rem solid rgb(100, 100, 100);
+}
+
+.newpost-button-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#new-post-detail {
+  border-radius: 1rem;
+  height: 8em;
+  width: 40em;
+  resize: none;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 2rem;
+  margin-left: 2rem;
+}
+
+.caption-container {
+  margin-left: 2.8rem;
+  margin-right: 2.8rem;
+}
+
+.caption-line {
+  border: 1px solid #b5dce6;
+  opacity: 0.4;
+}
+
+.post-caption {
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
+
+.post-topic,
+.post-username {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  color: #5b7881;
+}
+
+.post-username {
+  color: #5b7881;
+}
+
+.post-username:hover {
+  color: #78adb9;
+  cursor: pointer;
+}
+
+.post-line {
+  border: 1px solid #78adb9;
+  opacity: 0.7;
 }
 
 @keyframes slide-right {
@@ -576,9 +722,41 @@
 
   .profile-game-title {
     text-align: center;
+    font-size: 1.5rem;
   }
 
   .profile-nav-link {
     font-size: 1rem;
+  }
+
+  .newpost-input {
+    font-size: 1rem;
+  }
+
+  #new-post-detail {
+    height: 10em;
+    width: 20em;
+  }
+
+  .newpost-form-true {
+    left: 15%;
+  }
+
+  .post-topic,
+  .post-username {
+    font-size: 1rem;
+  }
+
+  .post-caption {
+    font-size: 0.75rem;
+  }
+
+  .add-game-plus {
+    font-size: 3rem;
+  }
+
+  .edit-game-pencil,
+  .game-delete {
+    font-size: 1.5rem;
   }
 }

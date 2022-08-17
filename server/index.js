@@ -47,15 +47,12 @@ app.post('/api/users/signIn', (req, res, next) => {
         throw new ClientError(401, 'invalid login');
       }
       const { userId, password: hashedPassword } = user;
-      // console.log(user);
-      // console.log('hashedpassword', hashedPassword, 'userId', userId);
       return argon2
         .verify(hashedPassword, password)
         .then(isMatching => {
           if (!isMatching) {
             throw new ClientError(401, 'invalid login');
           }
-          // console.log('ismatching?', isMatching);
           const payload = { userId, username };
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);
           res.json({ token, user: payload });
@@ -84,6 +81,26 @@ app.post('/api/users/signUp', (req, res, next) => {
         })
         .catch(err => next(err));
     });
+});
+
+app.get('/api/posts', (req, res, next) => {
+  const sql = `
+  select "p"."postId",
+         "p"."topic",
+         "p"."caption",
+         "p"."userId",
+         "u"."username",
+         "p"."datecreated"
+      from "posts" as "p"
+      join "users" as "u" using ("userId")
+      order by "p"."datecreated" desc
+  `;
+  db.query(sql)
+    .then(result => {
+      const posts = result.rows;
+      res.json(posts);
+    })
+    .catch(err => next(err));
 });
 
 app.use(authorizationMiddleware);
@@ -259,6 +276,30 @@ app.delete('/api/achievements', (req, res, next) => {
       const deletedAch = result.rows[0];
       const data = {
         achievement: deletedAch
+      };
+      res.json(data);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/post', (req, res, next) => {
+  const { topic, detail } = req.body;
+  const { userId } = req.user;
+  const params = [topic, detail, userId];
+  const sql = `
+  insert into "posts" ("topic", "caption", "userId")
+  values ($1, $2, $3)
+  returning *
+  `;
+  db.query(sql, params)
+    .then(result => {
+      const newPost = result.rows[0];
+      const data = {
+        postId: newPost.postId,
+        topic: newPost.topic,
+        caption: newPost.caption,
+        datecreated: newPost.datecreated,
+        userId: newPost.userId
       };
       res.json(data);
     })

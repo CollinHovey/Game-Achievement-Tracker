@@ -294,7 +294,7 @@ export default class ProfileAchievements extends React.Component {
   handleCancel(event) {
     event.preventDefault();
     this.setState({
-      shadowOn: !this.state.shadowOn,
+      shadowOn: false,
       newGame: '',
       newAchievement: '',
       achDetails: '',
