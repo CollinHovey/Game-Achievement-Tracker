@@ -679,6 +679,29 @@
   opacity: 0.7;
 }
 
+.cancel-search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cancel-search-button {
+  background-color: #9edeec;
+  padding: 1rem 2rem;
+  border-radius: 4rem;
+  font-size: 1rem;
+}
+
+.cancel-search-button:hover {
+  background-color: #78adb9;
+  cursor: pointer;
+  transition: ease-in-out 0.2s;
+}
+
+.search-results-count {
+  font-size: 1rem;
+}
+
 @keyframes slide-right {
   from {
     margin-left: -60%;
