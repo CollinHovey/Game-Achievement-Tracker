@@ -89,7 +89,7 @@ export default class HomeLoggedIn extends React.Component {
   }
 
   render() {
-    let postsList = <h1>hello</h1>;
+    let postsList = <h1>Loading Posts</h1>;
     const posts = this.state.posts;
     if (this.state.posts !== null) {
       postsList = posts.map((post, index) => {
