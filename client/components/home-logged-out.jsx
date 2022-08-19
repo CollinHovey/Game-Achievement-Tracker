@@ -84,7 +84,7 @@ export default class HomeLoggedOut extends React.Component {
           <div key={index} className='post-container'>
             <div className='post-header'>
               <h1 className='post-topic'>{post.topic}</h1>
-              <h1 className='post-username'>{post.username}</h1>
+              <a href={`#profile?userId=${post.userId}`} className='post-username'>{post.username}</a>
             </div>
             <div className='caption-container'>
               <hr className='caption-line'></hr>

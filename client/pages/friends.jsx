@@ -16,6 +16,7 @@ export default class Friends extends React.Component {
     } else {
       return (
         <>
+          <h1>Requests</h1>
           <h1>Friends</h1>
         </>
       );

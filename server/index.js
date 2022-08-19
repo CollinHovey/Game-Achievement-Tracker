@@ -115,6 +115,54 @@ app.get('/api/posts', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/visitorData/:userId', (req, res, next) => {
+  const { userId } = req.params;
+  const sql = `
+  select "g"."gameId",
+         "g"."gameName",
+         "g"."dateCreated" as "gameDate",
+         "a"."achievementId",
+         "a"."name" as "achievementName",
+         "a"."description" as "achievementDescription",
+         "a"."dateCreated" as "achievementDate"
+    from "games" as "g"
+    left join "achievements" as "a" on "g"."gameId" = "a"."gameId"
+    where "g"."userId" = $1
+    group by "g"."gameId", "a"."achievementId"
+    order by "g"."dateCreated"
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      const allData = result.rows;
+      const games = [];
+      const gameIds = [];
+      for (let x = 0; x < allData.length; x++) {
+        if (!gameIds.includes(allData[x].gameId)) {
+          const newGame = {
+            gameId: allData[x].gameId,
+            gameName: allData[x].gameName,
+            gameDate: allData[x].gameDate,
+            achievements: []
+          };
+          games.unshift(newGame);
+          gameIds.push(allData[x].gameId);
+        }
+        if (allData[x].achievementId !== null) {
+          const newAchievement = {
+            achievementId: allData[x].achievementId,
+            achievementName: allData[x].achievementName,
+            achievementDescription: allData[x].achievementDescription,
+            achievementDate: allData[x].achievementDate
+          };
+          games[0].achievements.push(newAchievement);
+        }
+      }
+      res.json(games);
+    })
+    .catch(err => next(err));
+});
+
 app.use(authorizationMiddleware);
 
 app.get('/api/achievements', (req, res, next) => {
