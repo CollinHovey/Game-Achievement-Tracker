@@ -35,6 +35,7 @@ export default class Profile extends React.Component {
   componentDidMount() {
     this.getGames();
     window.addEventListener('hashchange', () => {
+      // console.log('hashchange');
       this.getGames();
     });
   }
