@@ -20,6 +20,7 @@ export default class App extends React.Component {
     }
     this.state = {
       route: parseRoute(window.location.hash),
+      params: parseInt(parseRoute(window.location.hash).params.get('userId')),
       user,
       token,
       games: null
@@ -78,7 +79,10 @@ export default class App extends React.Component {
         const user = jwtDecode(token);
         this.setState({ user });
       }
-      this.setState({ route });
+      this.setState({
+        route,
+        params: parseInt(route.params.get('userId'))
+      });
     });
   }
 
@@ -116,9 +120,9 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, games, token, route } = this.state;
+    const { user, games, token, route, params } = this.state;
     const { handleSignIn, handleSignOut, handleHomeNav, handleFriendsNav, handleProfileNav } = this;
-    const contextValue = { route, handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
+    const contextValue = { params, route, handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
     return (
       <UserContext.Provider value={contextValue}>
         <>

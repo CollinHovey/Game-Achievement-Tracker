@@ -5,10 +5,16 @@ import ProfileFriends from '../components/profile-friends';
 import ProfilePosts from '../components/profile-posts';
 import VisitorAchievements from '../components/visitor-achievements';
 import VisitorPosts from '../components/visitor-posts';
+import ProfileHeader from '../components/profile-header';
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
+    // window.addEventListener('hashchange', () => {
+    //   console.log('hashchange');
+    //   console.log(parseInt(this.context.route.params.get('userId')) === this.state.userSite);
+    //   this.getGames();
+    // });
     this.state = {
       navOpen: 'initial',
       shadowOn: false,
@@ -23,13 +29,21 @@ export default class Profile extends React.Component {
     this.handleClickPosts = this.handleClickPosts.bind(this);
     this.handleClickFriends = this.handleClickFriends.bind(this);
     this.handleClickAchievements = this.handleClickAchievements.bind(this);
+    this.getGames = this.getGames.bind(this);
   }
 
   componentDidMount() {
-    const params = parseInt(this.context.route.params.get('userId'));
-    this.setState({ userSite: params });
+    this.getGames();
+    window.addEventListener('hashchange', () => {
+      this.getGames();
+    });
+  }
+
+  getGames() {
+    const params = this.context.params;
     const tokenJSON = localStorage.getItem('token');
     let userId = -1;
+    // console.log('profile get games');
     if (this.context.user !== null) {
       userId = this.context.user.userId;
     }
@@ -99,7 +113,7 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    const params = parseInt(this.context.route.params.get('userId'));
+    const params = this.context.params;
     let userId = -1;
     if (this.context.user !== null) {
       userId = this.context.user.userId;
@@ -114,6 +128,7 @@ export default class Profile extends React.Component {
       }
       return (
         <>
+          <ProfileHeader />
           <ul className='profile-nav'>
             <li className={`profile-nav-link active-${this.state.posts}`} onClick={this.handleClickPosts}>Posts</li>
             <div className='profile-vertical-line'></div>
@@ -131,6 +146,7 @@ export default class Profile extends React.Component {
       }
       return (
         <>
+          <ProfileHeader />
           <ul className='profile-nav'>
             <li className={`profile-nav-link active-${this.state.posts}`} onClick={this.handleClickPosts}>Posts</li>
             <div className='profile-vertical-line'></div>
