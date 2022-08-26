@@ -6,6 +6,7 @@ import ProfilePosts from '../components/profile-posts';
 import VisitorAchievements from '../components/visitor-achievements';
 import VisitorPosts from '../components/visitor-posts';
 import ProfileHeader from '../components/profile-header';
+import VisitorHeader from '../components/visitor-header';
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -77,8 +78,11 @@ export default class Profile extends React.Component {
         .then(response => response.json()
           .then(data => {
             const games = {
-              userId: params,
-              games: data
+              user: {
+                userId: params,
+                username: data.username
+              },
+              games: data.games
             };
             this.setState({ visitorGames: games });
           })
@@ -147,7 +151,7 @@ export default class Profile extends React.Component {
       }
       return (
         <>
-          <ProfileHeader />
+          <VisitorHeader user={this.state.visitorGames}/>
           <ul className='profile-nav'>
             <li className={`profile-nav-link active-${this.state.posts}`} onClick={this.handleClickPosts}>Posts</li>
             <div className='profile-vertical-line'></div>

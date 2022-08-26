@@ -252,6 +252,7 @@
 .profile-nav-link {
   padding: 0.5rem 2rem;
   text-align: center;
+  flex-basis: 33%;
 }
 
 .profile-nav-link:hover {
@@ -700,6 +701,15 @@
 
 .search-results-count {
   font-size: 1rem;
+}
+
+.profile-header {
+  text-align: center;
+}
+
+.profile-header-visitor {
+  display: flex;
+  justify-content: center;
 }
 
 @keyframes slide-right {

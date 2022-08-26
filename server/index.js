@@ -117,7 +117,7 @@ app.get('/api/posts', (req, res, next) => {
 
 app.get('/api/visitorData/:userId', (req, res, next) => {
   const { userId } = req.params;
-  const sql = `
+  const sql1 = `
   select "g"."gameId",
          "g"."gameName",
          "g"."dateCreated" as "gameDate",
@@ -131,8 +131,13 @@ app.get('/api/visitorData/:userId', (req, res, next) => {
     group by "g"."gameId", "a"."achievementId"
     order by "g"."dateCreated"
   `;
+  const sql2 = `
+  select "username"
+    from "users"
+    where "userId" = $1
+  `;
   const params = [userId];
-  db.query(sql, params)
+  db.query(sql1, params)
     .then(result => {
       const allData = result.rows;
       const games = [];
@@ -158,7 +163,15 @@ app.get('/api/visitorData/:userId', (req, res, next) => {
           games[0].achievements.push(newAchievement);
         }
       }
-      res.json(games);
+      db.query(sql2, params)
+        .then(result => {
+          const username = result.rows[0].username;
+          const newUser = {
+            games,
+            username
+          };
+          res.json(newUser);
+        });
     })
     .catch(err => next(err));
 });
