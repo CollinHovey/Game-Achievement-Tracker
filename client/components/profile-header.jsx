@@ -10,7 +10,11 @@ export default class ProfileHeader extends React.Component {
 
   render() {
     return (
-      <h1 className='profile-header'>{this.context.user.username}</h1>
+      <>
+        <h1 className='profile-header'>{this.context.user.username}</h1>
+        <hr className='profile-header-line'></hr>
+      </>
+
     );
   }
 }
