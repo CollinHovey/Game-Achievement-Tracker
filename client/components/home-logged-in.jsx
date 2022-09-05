@@ -26,7 +26,7 @@ export default class HomeLoggedIn extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ user: this.context.user.username });
+    this.setState({ user: this.context.user });
     fetch('/api/posts', {
       method: 'GET',
       headers: {
@@ -107,7 +107,7 @@ export default class HomeLoggedIn extends React.Component {
           const posts = this.state.posts;
           const newPosts = posts.slice();
           const newPost = data;
-          newPost.username = this.state.user;
+          newPost.username = this.state.user.username;
           newPosts.unshift(newPost);
           this.setState({
             topic: '',
@@ -143,7 +143,7 @@ export default class HomeLoggedIn extends React.Component {
           <div key={index} className='post-container'>
             <div className='post-header'>
               <h1 className='post-topic'>{post.topic}</h1>
-              <h1 className='post-username'>{post.username}</h1>
+              <a href={`#profile?userId=${post.userId}`} className='post-username'>{post.username}</a>
             </div>
             <div className='caption-container'>
               <hr className='caption-line'></hr>

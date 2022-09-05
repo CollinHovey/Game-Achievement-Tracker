@@ -20,6 +20,7 @@ export default class App extends React.Component {
     }
     this.state = {
       route: parseRoute(window.location.hash),
+      params: parseInt(parseRoute(window.location.hash).params.get('userId')),
       user,
       token,
       games: null
@@ -41,14 +42,14 @@ export default class App extends React.Component {
   }
 
   handleSignOut() {
+    // if (this.state.route !== '#home') {
+    //   window.location.hash = '#home';
+    // }
     window.localStorage.removeItem('token');
     this.setState({
       user: null,
       token: null
     });
-    if (this.state.route !== '#home') {
-      window.location.hash = '#home';
-    }
   }
 
   handleGetGames() {
@@ -78,23 +79,11 @@ export default class App extends React.Component {
         const user = jwtDecode(token);
         this.setState({ user });
       }
-      this.setState({ route });
+      this.setState({
+        route,
+        params: parseInt(route.params.get('userId'))
+      });
     });
-    const tokenJSON = localStorage.getItem('token');
-    const token = JSON.parse(tokenJSON);
-    if (token !== null) {
-      fetch('/api/achievements', {
-        method: 'GET',
-        headers: {
-          'X-Access-Token': tokenJSON
-        }
-      })
-        .then(response => response.json()
-          .then(data => {
-            this.setState({ games: data });
-          })
-        );
-    }
   }
 
   renderPage() {
@@ -108,7 +97,6 @@ export default class App extends React.Component {
     if (route.path === 'home') {
       return (
         <>
-          <Header />
           <Home />
         </>
       );
@@ -132,9 +120,9 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, games, token } = this.state;
+    const { user, games, token, route, params } = this.state;
     const { handleSignIn, handleSignOut, handleHomeNav, handleFriendsNav, handleProfileNav } = this;
-    const contextValue = { handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
+    const contextValue = { params, route, handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
     return (
       <UserContext.Provider value={contextValue}>
         <>

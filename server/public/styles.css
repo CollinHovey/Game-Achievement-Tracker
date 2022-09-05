@@ -240,7 +240,7 @@
   justify-content: space-evenly;
   position: relative;
   z-index: 3;
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
   margin-top: 0.5rem;
 }
 
@@ -252,6 +252,7 @@
 .profile-nav-link {
   padding: 0.5rem 2rem;
   text-align: center;
+  flex-basis: 33%;
 }
 
 .profile-nav-link:hover {
@@ -667,6 +668,8 @@
 
 .post-username {
   color: #5b7881;
+  text-decoration: none;
+  font-size: 1.5rem;
 }
 
 .post-username:hover {
@@ -700,6 +703,22 @@
 
 .search-results-count {
   font-size: 1rem;
+}
+
+.profile-header {
+  text-align: center;
+}
+
+.profile-header-visitor {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-header-line {
+  border: 1px solid #93c0cc;
+  border-style: solid;
+  margin-bottom: 1rem;
+  opacity: 0.7;
 }
 
 @keyframes slide-right {

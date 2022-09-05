@@ -389,7 +389,10 @@ export default class ProfileAchievements extends React.Component {
   }
 
   render() {
-    const games = this.context.games;
+    let games = [];
+    if (this.props.games !== null) {
+      games = this.props.games;
+    }
     let gamesList = <p className='no-games'>You Have No Games Added</p>;
     if (games.length !== 0) {
       gamesList = games.map((game, index) => {
