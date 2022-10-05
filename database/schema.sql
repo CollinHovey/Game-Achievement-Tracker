@@ -62,18 +62,15 @@ CREATE TABLE "friends" (
 	"friendId" serial NOT NULL,
 	"user1Id" int NOT NULL,
 	"user2Id" int NOT NULL,
-	"isActive" int NOT NULL,
 	CONSTRAINT "friends_pk" PRIMARY KEY ("friendId")
 ) WITH (
   OIDS=FALSE
 );
 
 CREATE TABLE "friendRequests" (
-	"requestId" serial NOT NULL,
 	"userSend" int NOT NULL,
 	"userRecieve" int NOT NULL,
-	"isActive" int NOT NULL,
-	CONSTRAINT "friendRequests_pk" PRIMARY KEY ("requestId")
+	CONSTRAINT "friendRequests_pk" PRIMARY KEY ("userSend", "userRecieve")
 ) WITH (
   OIDS=FALSE
 );

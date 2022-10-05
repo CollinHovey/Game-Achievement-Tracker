@@ -176,7 +176,60 @@ app.get('/api/visitorData/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/isFriend/:userId/:friendId', (req, res, next) => {
+  const { userId, friendId } = req.params;
+  const sql = `
+  select *
+    from "friends"
+    where ("user1Id" = $1 or "user1Id" = $2) and ("user2Id" = $1 or "user2Id" = $2)
+  `;
+  const params = [userId, friendId];
+  db.query(sql, params)
+    .then(result => {
+      let answer = { isActive: 0 };
+      if (result.rows[0] !== undefined) {
+        answer = result.rows[0];
+      }
+      res.json(answer);
+    });
+});
+
 app.use(authorizationMiddleware);
+
+app.get('/api/friendRequests/:userId', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+  select "r"."userSend" as "userId",
+         "users"."username"
+    from "friendRequests" as "r"
+    left join "users" on "r"."userSend" = "users"."userId"
+    where "r"."userRecieve" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/friends/:userId', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+  select "f"."friendId",
+         "f"."user2Id" as "friendUserId",
+         "u"."username" as "friendUsername"
+  from "friends" as "f"
+  left join "users" as "u" on "f"."user2Id" = "u"."userId"
+  where "user1Id" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      const friends = result.rows;
+      res.json(friends);
+    });
+});
 
 app.get('/api/achievements', (req, res, next) => {
   const { userId } = req.user;
@@ -375,6 +428,23 @@ app.post('/api/post', (req, res, next) => {
         userId: newPost.userId
       };
       res.json(data);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/addFriend', (req, res, next) => {
+  const { userId } = req.user;
+  const { reciever } = req.body;
+  const sql = `
+  insert into "friendRequests" ("userSend", "userRecieve")
+  values ($1, $2)
+  returning *
+  `;
+  const params = [userId, reciever];
+  db.query(sql, params)
+    .then(result => {
+      const newRequest = result.rows[0];
+      res.json(newRequest);
     })
     .catch(err => next(err));
 });

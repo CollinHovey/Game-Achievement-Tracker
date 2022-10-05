@@ -11,11 +11,6 @@ import VisitorHeader from '../components/visitor-header';
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
-    // window.addEventListener('hashchange', () => {
-    //   console.log('hashchange');
-    //   console.log(parseInt(this.context.route.params.get('userId')) === this.state.userSite);
-    //   this.getGames();
-    // });
     this.state = {
       navOpen: 'initial',
       shadowOn: false,
@@ -36,7 +31,6 @@ export default class Profile extends React.Component {
   componentDidMount() {
     this.getGames();
     window.addEventListener('hashchange', () => {
-      // console.log('hashchange');
       this.getGames();
     });
   }
@@ -45,8 +39,7 @@ export default class Profile extends React.Component {
     const params = this.context.params;
     const tokenJSON = localStorage.getItem('token');
     let userId = -1;
-    // console.log('profile get games');
-    if (this.context.user !== null) {
+    if (this.context.loggedIn) {
       userId = this.context.user.userId;
     }
     if (userId === params) {
@@ -59,7 +52,10 @@ export default class Profile extends React.Component {
         .then(response => response.json()
           .then(data => {
             const games = {
-              userId: params,
+              user: {
+                userId: params,
+                username: this.context.user.username
+              },
               games: data
             };
             this.setState({
@@ -120,7 +116,7 @@ export default class Profile extends React.Component {
   render() {
     const params = this.context.params;
     let userId = -1;
-    if (this.context.user !== null) {
+    if (this.context.loggedIn) {
       userId = this.context.user.userId;
     }
     if (userId === params) {
@@ -149,6 +145,7 @@ export default class Profile extends React.Component {
       if (this.state.tab === 'achievements') {
         tabRender = <VisitorAchievements games={this.state.visitorGames} />;
       }
+      // console.log('visitorgames', this.state.visitorGames);
       return (
         <>
           <VisitorHeader user={this.state.visitorGames}/>
