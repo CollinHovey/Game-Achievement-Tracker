@@ -4,7 +4,6 @@ import UserContext from '../lib/user-context';
 export default class VisitorHeader extends React.Component {
   constructor(props) {
     super(props);
-    // console.log('constructor', this.props);
     this.state = {
       areFriends: null,
       friendData: null
@@ -15,11 +14,6 @@ export default class VisitorHeader extends React.Component {
 
   componentDidMount() {
     this.isFriend();
-    // const pageId = this.context.params;
-    // let userId = -1;
-    // if (this.context.user !== null) {
-    //   userId = this.context.user.userId;
-    // }
   }
 
   isFriend() {
@@ -69,21 +63,18 @@ export default class VisitorHeader extends React.Component {
   render() {
     let button = <></>;
     if (this.context.loggedIn) {
-      button = <button onClick={this.addFriend}>Add Friend</button>;
+      button = <button className='add-friend-button' onClick={this.addFriend}>Add Friend</button>;
       if (this.state.areFriends) {
-        button = <button>Message Friend</button>;
+        button = <button className='add-friend-button'>Message Friend</button>;
       }
     }
-
-    // console.log('props', this.props);
     let user = 'Welcome';
     if (this.props.user !== null) {
       user = this.props.user.user.username;
     }
-    // console.log('render props', this.props.user);
     return (
       <div className='profile-header-visitor'>
-        <h1>{user}</h1>
+        <h1 className='profile-header-name'>{user}</h1>
         {button}
       </div>
     );

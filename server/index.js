@@ -84,15 +84,6 @@ app.post('/api/users/signUp', (req, res, next) => {
 });
 
 app.get('/api/posts', (req, res, next) => {
-  // select "p"."postId",
-  //   "p"."topic",
-  //     "p"."caption",
-  //       "p"."userId",
-  //         "u"."username",
-  //           "p"."datecreated"
-  //     from "posts" as "p"
-  //     join "users" as "u" using("userId")
-  //     order by "p"."datecreated" desc
   const sql = `
   select "p"."postId",
          "p"."topic",
@@ -195,6 +186,56 @@ app.get('/api/isFriend/:userId/:friendId', (req, res, next) => {
 });
 
 app.use(authorizationMiddleware);
+
+app.delete('/api/deleteRequest/:senderId', (req, res, next) => {
+  const { userId } = req.user;
+  const { senderId } = req.params;
+  const sql = `
+  delete from "friendRequests" where "userSend" = $1 and "userRecieve" = $2 returning *
+  `;
+  const params = [senderId, userId];
+  db.query(sql, params)
+    .then(result => {
+      const deletedRequest = result.rows[0];
+      res.json(deletedRequest);
+    });
+});
+
+app.delete('/api/removeFriend/:friendId', (req, res, next) => {
+  const { friendId } = req.params;
+  const sql = `
+    delete from "friends" where "friendId" = $1 returning *
+  `;
+  const params = [friendId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(friendId);
+    });
+});
+
+app.post('/api/friendAccept/:sendId', (req, res, next) => {
+  const { userId } = req.user;
+  const { sendId } = req.params;
+  const sql = `
+    insert into "friends" ("user1Id", "user2Id")
+    values ($1, $2)
+    returning*
+  `;
+  const params = [userId, sendId];
+  db.query(sql, params)
+    .then(result => {
+      const newFriend = result.rows[0];
+      const sql2 = `
+      delete from "friendRequests"
+        where "userSend" = $1 and "userRecieve" = $2
+      `;
+      const params2 = [sendId, userId];
+      db.query(sql2, params2)
+        .then(result2 => {
+          res.json(newFriend);
+        });
+    });
+});
 
 app.get('/api/friendRequests/:userId', (req, res, next) => {
   const { userId } = req.user;

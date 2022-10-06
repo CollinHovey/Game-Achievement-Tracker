@@ -711,7 +711,12 @@
 
 .profile-header-visitor {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .profile-header-line {
@@ -719,6 +724,54 @@
   border-style: solid;
   margin-bottom: 1rem;
   opacity: 0.7;
+}
+
+.friends-list-header {
+  text-align: center;
+  margin-top: 0;
+}
+
+.requests-container {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 6rem;
+  margin-right: 6rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+
+.requests-buttons {
+  margin-right: 1rem;
+  margin-left: 1rem;
+  font-size: 1.5rem;
+}
+
+.requests-buttons:hover {
+  cursor: pointer;
+}
+
+.friends-name {
+  font-size: 2rem;
+  text-decoration: none;
+  color: black;
+}
+
+.friends-name:visited {
+  color: black;
+}
+
+.add-friend-button {
+  padding: 0.5rem;
+  font-size: 2rem;
+}
+
+.add-friend-button:hover {
+  cursor: pointer;
+}
+
+.profile-header-name {
+  margin: 0;
 }
 
 @keyframes slide-right {
