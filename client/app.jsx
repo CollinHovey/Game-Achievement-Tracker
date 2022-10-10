@@ -15,15 +15,18 @@ export default class App extends React.Component {
     const tokenJSON = localStorage.getItem('token');
     const token = JSON.parse(tokenJSON);
     let user = null;
+    let loggedIn = false;
     if (token !== null) {
       user = jwtDecode(token);
+      loggedIn = true;
     }
     this.state = {
       route: parseRoute(window.location.hash),
       params: parseInt(parseRoute(window.location.hash).params.get('userId')),
       user,
       token,
-      games: null
+      games: null,
+      loggedIn
     };
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
@@ -36,7 +39,8 @@ export default class App extends React.Component {
     localStorage.setItem('token', JSON.stringify(token));
     this.setState({
       user,
-      token
+      token,
+      loggedIn: true
     });
     this.handleGetGames();
   }
@@ -48,7 +52,8 @@ export default class App extends React.Component {
     window.localStorage.removeItem('token');
     this.setState({
       user: null,
-      token: null
+      token: null,
+      loggedIn: false
     });
   }
 
@@ -77,7 +82,10 @@ export default class App extends React.Component {
       const token = JSON.parse(tokenJSON);
       if (token !== null) {
         const user = jwtDecode(token);
-        this.setState({ user });
+        this.setState({
+          user,
+          loggedIn: true
+        });
       }
       this.setState({
         route,
@@ -87,6 +95,7 @@ export default class App extends React.Component {
   }
 
   renderPage() {
+    // console.log('loggedin', this.state.loggedIn);
     const route = this.state.route;
     if (route.path === 'login') {
       return <Login />;
@@ -120,9 +129,9 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, games, token, route, params } = this.state;
+    const { user, games, token, route, params, loggedIn } = this.state;
     const { handleSignIn, handleSignOut, handleHomeNav, handleFriendsNav, handleProfileNav } = this;
-    const contextValue = { params, route, handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
+    const contextValue = { loggedIn, params, route, handleSignIn, handleSignOut, user, handleHomeNav, handleFriendsNav, handleProfileNav, games, token };
     return (
       <UserContext.Provider value={contextValue}>
         <>

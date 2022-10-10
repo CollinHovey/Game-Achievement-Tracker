@@ -84,15 +84,6 @@ app.post('/api/users/signUp', (req, res, next) => {
 });
 
 app.get('/api/posts', (req, res, next) => {
-  // select "p"."postId",
-  //   "p"."topic",
-  //     "p"."caption",
-  //       "p"."userId",
-  //         "u"."username",
-  //           "p"."datecreated"
-  //     from "posts" as "p"
-  //     join "users" as "u" using("userId")
-  //     order by "p"."datecreated" desc
   const sql = `
   select "p"."postId",
          "p"."topic",
@@ -176,7 +167,110 @@ app.get('/api/visitorData/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/isFriend/:userId/:friendId', (req, res, next) => {
+  const { userId, friendId } = req.params;
+  const sql = `
+  select *
+    from "friends"
+    where ("user1Id" = $1 or "user1Id" = $2) and ("user2Id" = $1 or "user2Id" = $2)
+  `;
+  const params = [userId, friendId];
+  db.query(sql, params)
+    .then(result => {
+      let answer = { isActive: 0 };
+      if (result.rows[0] !== undefined) {
+        answer = result.rows[0];
+      }
+      res.json(answer);
+    });
+});
+
 app.use(authorizationMiddleware);
+
+app.delete('/api/deleteRequest/:senderId', (req, res, next) => {
+  const { userId } = req.user;
+  const { senderId } = req.params;
+  const sql = `
+  delete from "friendRequests" where "userSend" = $1 and "userRecieve" = $2 returning *
+  `;
+  const params = [senderId, userId];
+  db.query(sql, params)
+    .then(result => {
+      const deletedRequest = result.rows[0];
+      res.json(deletedRequest);
+    });
+});
+
+app.delete('/api/removeFriend/:friendId', (req, res, next) => {
+  const { friendId } = req.params;
+  const sql = `
+    delete from "friends" where "friendId" = $1 returning *
+  `;
+  const params = [friendId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(friendId);
+    });
+});
+
+app.post('/api/friendAccept/:sendId', (req, res, next) => {
+  const { userId } = req.user;
+  const { sendId } = req.params;
+  const sql = `
+    insert into "friends" ("user1Id", "user2Id")
+    values ($1, $2)
+    returning*
+  `;
+  const params = [userId, sendId];
+  db.query(sql, params)
+    .then(result => {
+      const newFriend = result.rows[0];
+      const sql2 = `
+      delete from "friendRequests"
+        where "userSend" = $1 and "userRecieve" = $2
+      `;
+      const params2 = [sendId, userId];
+      db.query(sql2, params2)
+        .then(result2 => {
+          res.json(newFriend);
+        });
+    });
+});
+
+app.get('/api/friendRequests/:userId', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+  select "r"."userSend" as "userId",
+         "users"."username"
+    from "friendRequests" as "r"
+    left join "users" on "r"."userSend" = "users"."userId"
+    where "r"."userRecieve" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/friends/:userId', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+  select "f"."friendId",
+         "f"."user2Id" as "friendUserId",
+         "u"."username" as "friendUsername"
+  from "friends" as "f"
+  left join "users" as "u" on "f"."user2Id" = "u"."userId"
+  where "user1Id" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      const friends = result.rows;
+      res.json(friends);
+    });
+});
 
 app.get('/api/achievements', (req, res, next) => {
   const { userId } = req.user;
@@ -375,6 +469,23 @@ app.post('/api/post', (req, res, next) => {
         userId: newPost.userId
       };
       res.json(data);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/addFriend', (req, res, next) => {
+  const { userId } = req.user;
+  const { reciever } = req.body;
+  const sql = `
+  insert into "friendRequests" ("userSend", "userRecieve")
+  values ($1, $2)
+  returning *
+  `;
+  const params = [userId, reciever];
+  db.query(sql, params)
+    .then(result => {
+      const newRequest = result.rows[0];
+      res.json(newRequest);
     })
     .catch(err => next(err));
 });
