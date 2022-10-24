@@ -13,6 +13,11 @@ export default class ProfileFriends extends React.Component {
     this.acceptRequest = this.acceptRequest.bind(this);
     this.deleteRequest = this.deleteRequest.bind(this);
     this.removeFriend = this.removeFriend.bind(this);
+    this.messageFriend = this.messageFriend.bind(this);
+  }
+
+  messageFriend(friendId, index) {
+    // console.log(friendId);
   }
 
   deleteRequest(senderId, index) {
@@ -146,7 +151,10 @@ export default class ProfileFriends extends React.Component {
           <hr className='games-container-line'></hr>
           <div className='requests-container'>
             <a className='friends-name' href={`#profile?userId=${friend.friendUserId}`}>{friend.friendUsername}</a>
-            <button className='requests-buttons' onClick={() => this.removeFriend(friend.friendId, index)}>Remove Friend</button>
+            <div className='requests-button-container'>
+              <button className='requests-buttons' onClick={() => this.messageFriend(friend.friendUserId, index)}>Message Friend</button>
+              <button className='requests-buttons' onClick={() => this.removeFriend(friend.friendId, index)}>Remove Friend</button>
+            </div>
           </div>
         </div>
       );
