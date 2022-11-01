@@ -1,5 +1,6 @@
 import React from 'react';
 import UserContext from '../lib/user-context';
+// import { io } from 'socket.io-client';
 
 export default class Messages extends React.Component {
   constructor(props) {
@@ -8,6 +9,7 @@ export default class Messages extends React.Component {
       friends: []
     };
     this.getFriends = this.getFriends.bind(this);
+    this.startChat = this.startChat.bind(this);
   }
 
   componentDidMount() {
@@ -16,6 +18,11 @@ export default class Messages extends React.Component {
       window.location.hash = '#home';
     }
     this.getFriends();
+  }
+
+  startChat() {
+    // console.log('start chat');
+    // const socket = io();
   }
 
   getFriends() {
@@ -80,7 +87,7 @@ export default class Messages extends React.Component {
           </div>
           <div className='new-message'>
             <textarea className='new-message-input' ></textarea>
-            <button className='send-message-button'>Send</button>
+            <button className='send-message-button' onClick={this.startChat}>Send</button>
           </div>
         </div>
       </div>

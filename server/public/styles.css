@@ -787,7 +787,7 @@
   flex-basis: 80%;
   display: flex;
   flex-direction: column;
-  max-height: 53rem;
+  height: 100%;
 }
 
 .message-friends-list {
@@ -824,7 +824,7 @@
   overflow-y: scroll;
   display: flex;
   flex-direction: column-reverse;
-  min-height: 43.5rem;
+  max-height: 24rem;
 }
 
 .messages::-webkit-scrollbar {
@@ -871,6 +871,7 @@
 
 .new-message {
   position: relative;
+  flex-basis: 30%;
 }
 
 @keyframes slide-right {

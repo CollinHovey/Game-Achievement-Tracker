@@ -9,6 +9,10 @@ const ClientError = require('./client-error');
 const errorMiddleware = require('./error-middleware');
 
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
 const publicPath = path.join(__dirname, 'public');
 
 if (process.env.NODE_ENV === 'development') {
@@ -23,6 +27,14 @@ const db = new pg.Pool({
     rejectUnauthorized: false
   }
 });
+
+io.on('connection', socket => {
+  // console.log('a user connected');
+});
+
+// server.listen(5500, () => {
+//   console.log('socket listening on port 5500');
+// });
 
 const jsonMiddleware = express.json();
 
