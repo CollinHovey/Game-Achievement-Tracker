@@ -13,6 +13,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
+
 const publicPath = path.join(__dirname, 'public');
 
 if (process.env.NODE_ENV === 'development') {
@@ -27,14 +28,6 @@ const db = new pg.Pool({
     rejectUnauthorized: false
   }
 });
-
-io.on('connection', socket => {
-  // console.log('a user connected');
-});
-
-// server.listen(5500, () => {
-//   console.log('socket listening on port 5500');
-// });
 
 const jsonMiddleware = express.json();
 
@@ -195,6 +188,13 @@ app.get('/api/isFriend/:userId/:friendId', (req, res, next) => {
       }
       res.json(answer);
     });
+});
+
+io.on('connection', socket => {
+  socket.on('chat message', msg => {
+    // console.log('message', msg);
+  });
+  // console.log('a user connected');
 });
 
 app.use(authorizationMiddleware);
@@ -504,6 +504,6 @@ app.post('/api/addFriend', (req, res, next) => {
 
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
 });

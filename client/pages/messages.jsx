@@ -1,28 +1,56 @@
 import React from 'react';
 import UserContext from '../lib/user-context';
-// import { io } from 'socket.io-client';
+import { io } from 'socket.io-client';
+const socket = io();
 
 export default class Messages extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      friends: []
+      friends: [],
+      message: '',
+      currentRecipient: null
     };
     this.getFriends = this.getFriends.bind(this);
-    this.startChat = this.startChat.bind(this);
+    this.sendChat = this.sendChat.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.changeFriend = this.changeFriend.bind(this);
   }
 
   componentDidMount() {
-    // console.log('logged in', this.context.loggedIn);
     if (!this.context.loggedIn) {
       window.location.hash = '#home';
     }
     this.getFriends();
+    // console.log('start chat');
   }
 
-  startChat() {
-    // console.log('start chat');
-    // const socket = io();
+  handleTextChange(event) {
+    this.setState({ message: event.target.value });
+  }
+
+  changeFriend(friendUserId, index) {
+    // console.log(friendUserId);
+    const newFriends = this.state.friends.slice();
+    for (let i = 0; i < newFriends.length; i++) {
+      newFriends[i].isActive = false;
+    }
+    newFriends[index].isActive = true;
+    this.setState({
+      friends: newFriends,
+      currentRecipient: friendUserId
+    });
+  }
+
+  sendChat() {
+    // console.log('send chat');
+    const message = {
+      message: this.state.message,
+      sender: this.context.user.userId,
+      recipient: this.state.currentRecipient
+    };
+    socket.emit('chat message', message);
+    this.setState({ message: '' });
   }
 
   getFriends() {
@@ -36,6 +64,9 @@ export default class Messages extends React.Component {
     })
       .then(response => response.json()
         .then(data => {
+          for (let i = 0; i < data.length; i++) {
+            data[i].isActive = false;
+          }
           this.setState({ friends: data });
         })
       );
@@ -46,7 +77,7 @@ export default class Messages extends React.Component {
     if (this.state.friends.length > 0) {
       friendsList = this.state.friends.map((friend, index) => {
         return (
-          <li key={index} className='message-friend'>{friend.friendUsername}</li>
+          <li key={index} className={`message-friend message-friend-active-${friend.isActive}`} onClick={() => this.changeFriend(friend.friendUserId, index)}>{friend.friendUsername}</li>
         );
       });
     }
@@ -71,23 +102,10 @@ export default class Messages extends React.Component {
             <p className='message-recieved'>Hey Chief, what you doing</p>
             <p className='message-sent'>Nothing much</p>
             <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
           </div>
           <div className='new-message'>
-            <textarea className='new-message-input' ></textarea>
-            <button className='send-message-button' onClick={this.startChat}>Send</button>
+            <textarea className='new-message-input' value={this.state.message} onChange={this.handleTextChange}></textarea>
+            <button className='send-message-button' onClick={this.sendChat}>Send</button>
           </div>
         </div>
       </div>
