@@ -56,11 +56,17 @@ export default class ProfileFriends extends React.Component {
 
   acceptRequest(sendId, sendUsername, index) {
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/friendAccept/${sendId}`, {
+    const newInfo = {
+      sendId,
+      sendUsername
+    };
+    fetch('api/friendAccept', {
       method: 'POST',
       headers: {
-        'X-Access-Token': tokenJSON
-      }
+        'X-Access-Token': tokenJSON,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newInfo)
     })
       .then(response => response.json()
         .then(data => {

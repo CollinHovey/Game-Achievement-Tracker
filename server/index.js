@@ -191,19 +191,60 @@ app.get('/api/isFriend/:userId/:friendId', (req, res, next) => {
 });
 
 io.on('connection', socket => {
-  // console.log('a user connected');
-  socket.on('join room', socket => {
-    // console.log('join room', socket);
-  });
-  socket.on('chat message', msg => {
-    // console.log('message', msg);
+  socket.on('join room', room => {
+    socket.join(`${room}`);
+    socket.on('chat message', msg => {
+      io.to(`${room}`).emit('broadcast message', msg);
+    });
   });
   socket.on('disconnect', () => {
-    // console.log('user disconnected');
   });
 });
 
 app.use(authorizationMiddleware);
+
+app.post('/api/newMessage', (req, res, next) => {
+  const { message, sender, recipient, friendId } = req.body;
+  const sql = `
+  insert into "messages" ("message", "senderId", "recipientId", "friendId")
+  values ($1, $2, $3, $4)
+  returning*
+  `;
+  const params = [message, sender, recipient, friendId];
+  db.query(sql, params)
+    .then(result => {
+      const newMessage = {
+        message: result.rows[0].message,
+        senderId: result.rows[0].senderId,
+        recipient: result.rows[0].recipientId,
+        friendId: result.rows[0].friendId
+      };
+      res.json(newMessage);
+    });
+});
+
+app.get('/api/messages/:friendId', (req, res, next) => {
+  const { userId } = req.user;
+  const { friendId } = req.params;
+  const sql = `
+  select * from "messages" where "friendId" = $1 order by "messageId" desc
+  `;
+  const params = [friendId];
+  db.query(sql, params)
+    .then(result => {
+      const newMessages = [];
+      for (let x = 0; x < result.rows.length; x++) {
+        if (result.rows[x].senderId === userId) {
+          result.rows[x].status = 'sent';
+          newMessages.push(result.rows[x]);
+        } else {
+          result.rows[x].status = 'recieved';
+          newMessages.push(result.rows[x]);
+        }
+      }
+      res.json(newMessages);
+    });
+});
 
 app.delete('/api/deleteRequest/:senderId', (req, res, next) => {
   const { userId } = req.user;
@@ -231,15 +272,15 @@ app.delete('/api/removeFriend/:friendId', (req, res, next) => {
     });
 });
 
-app.post('/api/friendAccept/:sendId', (req, res, next) => {
-  const { userId } = req.user;
-  const { sendId } = req.params;
+app.post('/api/friendAccept', (req, res, next) => {
+  const { userId, username } = req.user;
+  const { sendId, sendUsername } = req.body;
   const sql = `
-    insert into "friends" ("user1Id", "user2Id")
-    values ($1, $2)
+    insert into "friends" ("user1Id", "user1name", "user2Id", "user2name")
+    values ($1, $2, $3, $4)
     returning*
   `;
-  const params = [userId, sendId];
+  const params = [userId, username, sendId, sendUsername];
   db.query(sql, params)
     .then(result => {
       const newFriend = result.rows[0];
@@ -276,17 +317,33 @@ app.get('/api/friends/:userId', (req, res, next) => {
   const { userId } = req.user;
   const sql = `
   select "f"."friendId",
-         "f"."user2Id" as "friendUserId",
-         "u"."username" as "friendUsername"
+         "f"."user1Id",
+         "f"."user1name" as "user1name",
+         "f"."user2Id",
+         "f"."user2name" as "user2name"
   from "friends" as "f"
-  left join "users" as "u" on "f"."user2Id" = "u"."userId"
-  where "user1Id" = $1
+  where "user1Id" = $1 or "user2Id" = $1
   `;
   const params = [userId];
   db.query(sql, params)
     .then(result => {
       const friends = result.rows;
-      res.json(friends);
+      const newFriends = [];
+      for (let x = 0; x < friends.length; x++) {
+        const friendEntry = {};
+        if (friends[x].user1Id === userId) {
+          friendEntry.friendUserId = friends[x].user2Id;
+          friendEntry.friendUsername = friends[x].user2name;
+          friendEntry.friendId = friends[x].friendId;
+          newFriends.push(friendEntry);
+        } else {
+          friendEntry.friendUserId = friends[x].user1Id;
+          friendEntry.friendUsername = friends[x].user1name;
+          friendEntry.friendId = friends[x].friendId;
+          newFriends.push(friendEntry);
+        }
+      }
+      res.json(newFriends);
     });
 });
 

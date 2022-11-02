@@ -61,7 +61,9 @@ CREATE TABLE "achievements" (
 CREATE TABLE "friends" (
 	"friendId" serial NOT NULL,
 	"user1Id" int NOT NULL,
+  "user1name" TEXT NOT NULL,
 	"user2Id" int NOT NULL,
+  "user2name" TEXT NOT NULL,
 	CONSTRAINT "friends_pk" PRIMARY KEY ("friendId")
 ) WITH (
   OIDS=FALSE
@@ -88,6 +90,7 @@ CREATE TABLE "messages" (
   "message" TEXT NOT NULL,
   "senderId" int NOT NULL,
   "recipientId" int NOT NULL,
+  "friendId" int NOT NULL,
   CONSTRAINT "messages_pk" PRIMARY KEY ("messageId")
 ) WITH (
   OIDS=FALSE
