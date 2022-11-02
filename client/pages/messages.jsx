@@ -175,17 +175,6 @@ export default class Messages extends React.Component {
         <div className='messaging-container'>
           <div className='messages'>
             {messageList}
-            {/* <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p>
-            <p className='message-sent'>Nothing much</p>
-            <p className='message-recieved'>Hey Chief, what you doing</p> */}
           </div>
           <div className='new-message'>
             <textarea className='new-message-input' value={this.state.message} onChange={this.handleTextChange}></textarea>
