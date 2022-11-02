@@ -9,7 +9,8 @@ export default class Messages extends React.Component {
     this.state = {
       friends: [],
       message: '',
-      currentRecipient: null
+      currentRecipient: null,
+      messages: []
     };
     this.getFriends = this.getFriends.bind(this);
     this.sendChat = this.sendChat.bind(this);
@@ -29,8 +30,9 @@ export default class Messages extends React.Component {
     this.setState({ message: event.target.value });
   }
 
-  changeFriend(friendUserId, index) {
+  changeFriend(friendUserId, index, friendId) {
     // console.log(friendUserId);
+    // console.log('change friend');
     const newFriends = this.state.friends.slice();
     for (let i = 0; i < newFriends.length; i++) {
       newFriends[i].isActive = false;
@@ -40,16 +42,19 @@ export default class Messages extends React.Component {
       friends: newFriends,
       currentRecipient: friendUserId
     });
+    socket.emit('join room', friendId);
   }
 
   sendChat() {
-    // console.log('send chat');
-    const message = {
-      message: this.state.message,
-      sender: this.context.user.userId,
-      recipient: this.state.currentRecipient
-    };
-    socket.emit('chat message', message);
+    // console.log('send chat', this.state.message);
+    if (this.state.currentRecipient !== null) {
+      const message = {
+        message: this.state.message,
+        sender: this.context.user.userId,
+        recipient: this.state.currentRecipient
+      };
+      socket.emit('chat message', message);
+    }
     this.setState({ message: '' });
   }
 
@@ -77,7 +82,7 @@ export default class Messages extends React.Component {
     if (this.state.friends.length > 0) {
       friendsList = this.state.friends.map((friend, index) => {
         return (
-          <li key={index} className={`message-friend message-friend-active-${friend.isActive}`} onClick={() => this.changeFriend(friend.friendUserId, index)}>{friend.friendUsername}</li>
+          <li key={index} className={`message-friend message-friend-active-${friend.isActive}`} onClick={() => this.changeFriend(friend.friendUserId, index, friend.friendId)}>{friend.friendUsername}</li>
         );
       });
     }

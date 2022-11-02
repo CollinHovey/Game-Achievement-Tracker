@@ -83,6 +83,16 @@ CREATE TABLE "likes" (
   OIDS=FALSE
 );
 
+CREATE TABLE "messages" (
+  "messageId" serial NOT NULL,
+  "message" TEXT NOT NULL,
+  "senderId" int NOT NULL,
+  "recipientId" int NOT NULL,
+  CONSTRAINT "messages_pk" PRIMARY KEY ("messageId")
+) WITH (
+  OIDS=FALSE
+);
+
 ALTER TABLE "posts" ADD CONSTRAINT "posts_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
 ALTER TABLE "comments" ADD CONSTRAINT "comments_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
@@ -100,3 +110,6 @@ ALTER TABLE "friendRequests" ADD CONSTRAINT "friendRequests_fk1" FOREIGN KEY ("u
 
 ALTER TABLE "likes" ADD CONSTRAINT "likes_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 ALTER TABLE "likes" ADD CONSTRAINT "likes_fk1" FOREIGN KEY ("postId") REFERENCES "posts"("postId");
+
+ALTER TABLE "messages" ADD CONSTRAINT "messages_fk0" FOREIGN KEY ("senderId") REFERENCES "users"("userId");
+ALTER TABLE "messages" ADD CONSTRAINT "messages_fk1" FOREIGN KEY ("recipientId") REFERENCES "users"("userId");

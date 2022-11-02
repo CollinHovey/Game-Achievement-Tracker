@@ -191,10 +191,16 @@ app.get('/api/isFriend/:userId/:friendId', (req, res, next) => {
 });
 
 io.on('connection', socket => {
+  // console.log('a user connected');
+  socket.on('join room', socket => {
+    // console.log('join room', socket);
+  });
   socket.on('chat message', msg => {
     // console.log('message', msg);
   });
-  // console.log('a user connected');
+  socket.on('disconnect', () => {
+    // console.log('user disconnected');
+  });
 });
 
 app.use(authorizationMiddleware);

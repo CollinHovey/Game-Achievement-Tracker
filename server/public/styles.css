@@ -116,6 +116,7 @@
   z-index: 2;
   position: relative;
   border-bottom: 2px solid #93c0cc;
+  height: 8.6vh;
 }
 
 .home-content-test {
@@ -204,6 +205,7 @@
 }
 
 .nav-link {
+  color: black;
   padding: 1rem 2rem;
   list-style: none;
   margin-bottom: 1rem;
@@ -776,6 +778,7 @@
 
 .message-container {
   display: flex;
+  height: 91.4vh;
 }
 
 .message-friends-container {
@@ -784,10 +787,9 @@
 }
 
 .messaging-container {
-  flex-basis: 80%;
+  flex-basis: 92.4%;
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .message-friends-list {
@@ -818,13 +820,18 @@
   font-size: 2rem;
   background-color: #eafbff;
   padding-right: 10rem;
+  border: none;
+}
+
+.new-message-input:focus {
+  outline: none;
+  background-color: #d9f8ff;
 }
 
 .messages {
   overflow-y: scroll;
   display: flex;
   flex-direction: column-reverse;
-  max-height: 43.9rem;
 }
 
 .messages::-webkit-scrollbar {
@@ -871,7 +878,7 @@
 
 .new-message {
   position: relative;
-  flex-basis: 30%;
+  border: 1px solid black;
 }
 
 .message-friend-active-true {
