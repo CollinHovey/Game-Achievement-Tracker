@@ -13,16 +13,11 @@ export default class ProfileFriends extends React.Component {
     this.acceptRequest = this.acceptRequest.bind(this);
     this.deleteRequest = this.deleteRequest.bind(this);
     this.removeFriend = this.removeFriend.bind(this);
-    this.messageFriend = this.messageFriend.bind(this);
-  }
-
-  messageFriend(friendId, index) {
-    // console.log(friendId);
   }
 
   deleteRequest(senderId, index) {
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/deleteRequest/${senderId}`, {
+    fetch(`/api/deleteRequest/${senderId}`, {
       method: 'DELETE',
       headers: {
         'X-Access-Token': tokenJSON
@@ -39,7 +34,7 @@ export default class ProfileFriends extends React.Component {
 
   removeFriend(friendId, index) {
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/removeFriend/${friendId}`, {
+    fetch(`/api/removeFriend/${friendId}`, {
       method: 'DELETE',
       headers: {
         'X-Access-Token': tokenJSON
@@ -60,7 +55,7 @@ export default class ProfileFriends extends React.Component {
       sendId,
       sendUsername
     };
-    fetch('api/friendAccept', {
+    fetch('/api/friendAccept', {
       method: 'POST',
       headers: {
         'X-Access-Token': tokenJSON,
@@ -90,7 +85,7 @@ export default class ProfileFriends extends React.Component {
   getRequests() {
     const userId = this.context.user.userId;
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/friendRequests/${userId}`, {
+    fetch(`/api/friendRequests/${userId}`, {
       method: 'GET',
       headers: {
         'X-Access-Token': tokenJSON
@@ -106,7 +101,7 @@ export default class ProfileFriends extends React.Component {
   getFriends() {
     const userId = this.context.user.userId;
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/friends/${userId}`, {
+    fetch(`/api/friends/${userId}`, {
       method: 'GET',
       headers: {
         'X-Access-Token': tokenJSON

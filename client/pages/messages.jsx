@@ -63,7 +63,7 @@ export default class Messages extends React.Component {
     if (!newFriends[index].inRoom) {
       socket.emit('join room', friendId);
       newFriends[index].inRoom = true;
-      fetch(`api/messages/${friendId}`, {
+      fetch(`/api/messages/${friendId}`, {
         method: 'GET',
         headers: {
           'X-Access-Token': tokenJSON
@@ -101,7 +101,7 @@ export default class Messages extends React.Component {
         friendId: this.state.currentRecipient.friendId
       };
       socket.emit('chat message', message);
-      fetch('api/newMessage', {
+      fetch('/api/newMessage', {
         method: 'POST',
         headers: {
           'X-Access-Token': tokenJSON,
@@ -120,7 +120,7 @@ export default class Messages extends React.Component {
   getFriends() {
     const userId = this.context.user.userId;
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/friends/${userId}`, {
+    fetch(`/api/friends/${userId}`, {
       method: 'GET',
       headers: {
         'X-Access-Token': tokenJSON
