@@ -17,7 +17,7 @@ export default class ProfileFriends extends React.Component {
 
   deleteRequest(senderId, index) {
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/deleteRequest/${senderId}`, {
+    fetch(`/api/deleteRequest/${senderId}`, {
       method: 'DELETE',
       headers: {
         'X-Access-Token': tokenJSON
@@ -34,7 +34,7 @@ export default class ProfileFriends extends React.Component {
 
   removeFriend(friendId, index) {
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/removeFriend/${friendId}`, {
+    fetch(`/api/removeFriend/${friendId}`, {
       method: 'DELETE',
       headers: {
         'X-Access-Token': tokenJSON
@@ -51,11 +51,17 @@ export default class ProfileFriends extends React.Component {
 
   acceptRequest(sendId, sendUsername, index) {
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/friendAccept/${sendId}`, {
+    const newInfo = {
+      sendId,
+      sendUsername
+    };
+    fetch('/api/friendAccept', {
       method: 'POST',
       headers: {
-        'X-Access-Token': tokenJSON
-      }
+        'X-Access-Token': tokenJSON,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newInfo)
     })
       .then(response => response.json()
         .then(data => {
@@ -79,7 +85,7 @@ export default class ProfileFriends extends React.Component {
   getRequests() {
     const userId = this.context.user.userId;
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/friendRequests/${userId}`, {
+    fetch(`/api/friendRequests/${userId}`, {
       method: 'GET',
       headers: {
         'X-Access-Token': tokenJSON
@@ -95,7 +101,7 @@ export default class ProfileFriends extends React.Component {
   getFriends() {
     const userId = this.context.user.userId;
     const tokenJSON = localStorage.getItem('token');
-    fetch(`api/friends/${userId}`, {
+    fetch(`/api/friends/${userId}`, {
       method: 'GET',
       headers: {
         'X-Access-Token': tokenJSON
@@ -146,7 +152,10 @@ export default class ProfileFriends extends React.Component {
           <hr className='games-container-line'></hr>
           <div className='requests-container'>
             <a className='friends-name' href={`#profile?userId=${friend.friendUserId}`}>{friend.friendUsername}</a>
-            <button className='requests-buttons' onClick={() => this.removeFriend(friend.friendId, index)}>Remove Friend</button>
+            <div className='requests-button-container'>
+              <button className='requests-buttons' onClick={() => this.messageFriend(friend.friendUserId, index)}>Message Friend</button>
+              <button className='requests-buttons' onClick={() => this.removeFriend(friend.friendId, index)}>Remove Friend</button>
+            </div>
           </div>
         </div>
       );

@@ -9,6 +9,11 @@ const ClientError = require('./client-error');
 const errorMiddleware = require('./error-middleware');
 
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
+
 const publicPath = path.join(__dirname, 'public');
 
 if (process.env.NODE_ENV === 'development') {
@@ -185,7 +190,61 @@ app.get('/api/isFriend/:userId/:friendId', (req, res, next) => {
     });
 });
 
+io.on('connection', socket => {
+  socket.on('join room', room => {
+    socket.join(`${room}`);
+    socket.on('chat message', msg => {
+      io.to(`${room}`).emit('broadcast message', msg);
+    });
+  });
+  socket.on('disconnect', () => {
+  });
+});
+
 app.use(authorizationMiddleware);
+
+app.post('/api/newMessage', (req, res, next) => {
+  const { message, sender, recipient, friendId } = req.body;
+  const sql = `
+  insert into "messages" ("message", "senderId", "recipientId", "friendId")
+  values ($1, $2, $3, $4)
+  returning*
+  `;
+  const params = [message, sender, recipient, friendId];
+  db.query(sql, params)
+    .then(result => {
+      const newMessage = {
+        message: result.rows[0].message,
+        senderId: result.rows[0].senderId,
+        recipient: result.rows[0].recipientId,
+        friendId: result.rows[0].friendId
+      };
+      res.json(newMessage);
+    });
+});
+
+app.get('/api/messages/:friendId', (req, res, next) => {
+  const { userId } = req.user;
+  const { friendId } = req.params;
+  const sql = `
+  select * from "messages" where "friendId" = $1 order by "messageId" desc
+  `;
+  const params = [friendId];
+  db.query(sql, params)
+    .then(result => {
+      const newMessages = [];
+      for (let x = 0; x < result.rows.length; x++) {
+        if (result.rows[x].senderId === userId) {
+          result.rows[x].status = 'sent';
+          newMessages.push(result.rows[x]);
+        } else {
+          result.rows[x].status = 'recieved';
+          newMessages.push(result.rows[x]);
+        }
+      }
+      res.json(newMessages);
+    });
+});
 
 app.delete('/api/deleteRequest/:senderId', (req, res, next) => {
   const { userId } = req.user;
@@ -213,15 +272,15 @@ app.delete('/api/removeFriend/:friendId', (req, res, next) => {
     });
 });
 
-app.post('/api/friendAccept/:sendId', (req, res, next) => {
-  const { userId } = req.user;
-  const { sendId } = req.params;
+app.post('/api/friendAccept', (req, res, next) => {
+  const { userId, username } = req.user;
+  const { sendId, sendUsername } = req.body;
   const sql = `
-    insert into "friends" ("user1Id", "user2Id")
-    values ($1, $2)
+    insert into "friends" ("user1Id", "user1name", "user2Id", "user2name")
+    values ($1, $2, $3, $4)
     returning*
   `;
-  const params = [userId, sendId];
+  const params = [userId, username, sendId, sendUsername];
   db.query(sql, params)
     .then(result => {
       const newFriend = result.rows[0];
@@ -258,17 +317,33 @@ app.get('/api/friends/:userId', (req, res, next) => {
   const { userId } = req.user;
   const sql = `
   select "f"."friendId",
-         "f"."user2Id" as "friendUserId",
-         "u"."username" as "friendUsername"
+         "f"."user1Id",
+         "f"."user1name" as "user1name",
+         "f"."user2Id",
+         "f"."user2name" as "user2name"
   from "friends" as "f"
-  left join "users" as "u" on "f"."user2Id" = "u"."userId"
-  where "user1Id" = $1
+  where "user1Id" = $1 or "user2Id" = $1
   `;
   const params = [userId];
   db.query(sql, params)
     .then(result => {
       const friends = result.rows;
-      res.json(friends);
+      const newFriends = [];
+      for (let x = 0; x < friends.length; x++) {
+        const friendEntry = {};
+        if (friends[x].user1Id === userId) {
+          friendEntry.friendUserId = friends[x].user2Id;
+          friendEntry.friendUsername = friends[x].user2name;
+          friendEntry.friendId = friends[x].friendId;
+          newFriends.push(friendEntry);
+        } else {
+          friendEntry.friendUserId = friends[x].user1Id;
+          friendEntry.friendUsername = friends[x].user1name;
+          friendEntry.friendId = friends[x].friendId;
+          newFriends.push(friendEntry);
+        }
+      }
+      res.json(newFriends);
     });
 });
 
@@ -492,6 +567,6 @@ app.post('/api/addFriend', (req, res, next) => {
 
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
 });

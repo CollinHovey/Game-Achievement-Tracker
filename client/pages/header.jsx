@@ -38,9 +38,11 @@ export default class Header extends React.Component {
   }
 
   render() {
-    let profile = '#home';
+    let messages = <></>;
+    let profile = <></>;
     if (this.context.user !== null) {
-      profile = `#profile?userId=${this.context.user.userId}`;
+      profile = <a className='nav-link' href={`#profile?userId=${this.context.user.userId}`}>Profile</a>;
+      messages = <a className='nav-link' href={`#messages?userId=${this.context.user.userId}`}>Messages</a>;
     }
     const { handleSignOut } = this.context;
     let headerTitle = 'Welcome Guest!';
@@ -54,7 +56,8 @@ export default class Header extends React.Component {
         <ul className={`nav-list-container-${this.state.navOpen}`}>
           <li className='nav-link'><i className="fa-solid fa-bars fa-2x" onClick={this.handleCloseNav}></i></li>
           <a className='nav-link' href='#home'>Home</a>
-          <a className='nav-link' href={profile}>Profile</a>
+          {profile}
+          {messages}
         </ul>
         <div className={`shadow-${this.state.shadowOn}`} onClick={this.handleCloseNav}></div>
         <div className='header-container'>

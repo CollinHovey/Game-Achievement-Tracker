@@ -5,6 +5,7 @@ import Signup from './pages/signup';
 import Friends from './pages/friends';
 import Profile from './pages/profile';
 import Header from './pages/header';
+import Messages from './pages/messages';
 import parseRoute from './lib/parse-route';
 import UserContext from './lib/user-context';
 import jwtDecode from 'jwt-decode';
@@ -46,9 +47,7 @@ export default class App extends React.Component {
   }
 
   handleSignOut() {
-    // if (this.state.route !== '#home') {
-    //   window.location.hash = '#home';
-    // }
+    window.location.hash = '#home';
     window.localStorage.removeItem('token');
     this.setState({
       user: null,
@@ -95,7 +94,6 @@ export default class App extends React.Component {
   }
 
   renderPage() {
-    // console.log('loggedin', this.state.loggedIn);
     const route = this.state.route;
     if (route.path === 'login') {
       return <Login />;
@@ -123,6 +121,14 @@ export default class App extends React.Component {
         <>
           <Header />
           <Profile />
+        </>
+      );
+    }
+    if (route.path === 'messages') {
+      return (
+        <>
+          <Header />
+          <Messages />
         </>
       );
     }
