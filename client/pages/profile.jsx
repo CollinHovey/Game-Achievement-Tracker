@@ -146,7 +146,6 @@ export default class Profile extends React.Component {
       if (this.state.tab === 'achievements') {
         tabRender = <VisitorAchievements games={this.state.visitorGames} />;
       }
-      // console.log('visitorgames', this.state.visitorGames);
       return (
         <>
           <VisitorHeader user={this.state.visitorGames}/>

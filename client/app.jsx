@@ -47,9 +47,6 @@ export default class App extends React.Component {
   }
 
   handleSignOut() {
-    // if (this.state.route !== '#home') {
-    //   window.location.hash = '#home';
-    // }
     window.location.hash = '#home';
     window.localStorage.removeItem('token');
     this.setState({
@@ -97,7 +94,6 @@ export default class App extends React.Component {
   }
 
   renderPage() {
-    // console.log('loggedin', this.state.loggedIn);
     const route = this.state.route;
     if (route.path === 'login') {
       return <Login />;

@@ -15,10 +15,6 @@ export default class Signup extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    // console.log('rendered Login');
-  }
-
   handleUsernameChange(event) {
     this.setState({ username: event.target.value });
   }
@@ -33,13 +29,11 @@ export default class Signup extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // console.log('username: ', this.state.username, 'password: ', this.state.password);
     const signUp = {
       username: this.state.username,
       password: this.state.password,
       email: this.state.email
     };
-    // console.log('Send Login Data', login);
     fetch('/api/users/signUp', {
       method: 'POST',
       headers: {
@@ -47,14 +41,6 @@ export default class Signup extends React.Component {
       },
       body: JSON.stringify(signUp)
     });
-    // .then(response => response.json()
-    //   .then(data => {
-    //     console.log('signup succesful', data);
-    //   })
-    //   .catch(() => {
-    //     console.log('invalid signup');
-    //     this.setState({ login: 'invalid' });
-    //   }));
     this.setState({ username: '' });
     this.setState({ password: '' });
     this.setState({ email: '' });
@@ -77,7 +63,6 @@ export default class Signup extends React.Component {
               <button className='signup-button big-button'>Sign Up</button>
               <a href='#login' className='login-link'>Already have an account? Login!</a>
             </div>
-
           </form>
         </div>
       </>

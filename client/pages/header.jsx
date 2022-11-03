@@ -38,11 +38,9 @@ export default class Header extends React.Component {
   }
 
   render() {
-    // let profileName = '#home';
     let messages = <></>;
     let profile = <></>;
     if (this.context.user !== null) {
-      // profileName = `#profile?userId=${this.context.user.userId}`;
       profile = <a className='nav-link' href={`#profile?userId=${this.context.user.userId}`}>Profile</a>;
       messages = <a className='nav-link' href={`#messages?userId=${this.context.user.userId}`}>Messages</a>;
     }
@@ -60,7 +58,6 @@ export default class Header extends React.Component {
           <a className='nav-link' href='#home'>Home</a>
           {profile}
           {messages}
-          {/* <a className='nav-link' href={profileName}>Profile</a> */}
         </ul>
         <div className={`shadow-${this.state.shadowOn}`} onClick={this.handleCloseNav}></div>
         <div className='header-container'>
