@@ -193,9 +193,9 @@ app.get('/api/isFriend/:userId/:friendId', (req, res, next) => {
 io.on('connection', socket => {
   socket.on('join room', room => {
     socket.join(`${room}`);
-    socket.on('chat message', msg => {
-      io.to(`${room}`).emit('broadcast message', msg);
-    });
+  });
+  socket.on('chat message', msg => {
+    io.to(`${msg.friendId}`).emit('broadcast message', msg);
   });
   socket.on('disconnect', () => {
   });

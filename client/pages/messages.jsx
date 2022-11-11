@@ -16,6 +16,7 @@ export default class Messages extends React.Component {
     this.sendChat = this.sendChat.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
     this.changeFriend = this.changeFriend.bind(this);
+    this.enterSendChat = this.enterSendChat.bind(this);
   }
 
   componentDidMount() {
@@ -48,8 +49,17 @@ export default class Messages extends React.Component {
     });
   }
 
+  enterSendChat(event) {
+    if (event.key === 'Enter') {
+      this.sendChat();
+      this.setState({ message: '' });
+    }
+  }
+
   handleTextChange(event) {
-    this.setState({ message: event.target.value });
+    if (event.nativeEvent.inputType !== 'insertLineBreak') {
+      this.setState({ message: event.target.value });
+    }
   }
 
   changeFriend(friendUserId, index, friendId) {
@@ -78,22 +88,31 @@ export default class Messages extends React.Component {
             const newChats = this.state.chats.slice();
             newChats.push(newChat);
             this.setState({ chats: newChats });
+            const currentRecipient = {
+              friendUserId,
+              friendId
+            };
+            this.setState({
+              friends: newFriends,
+              currentRecipient
+            });
           })
         );
+    } else {
+      const currentRecipient = {
+        friendUserId,
+        friendId
+      };
+      this.setState({
+        friends: newFriends,
+        currentRecipient
+      });
     }
-    const currentRecipient = {
-      friendUserId,
-      friendId
-    };
-    this.setState({
-      friends: newFriends,
-      currentRecipient
-    });
   }
 
   sendChat() {
     const tokenJSON = localStorage.getItem('token');
-    if (this.state.currentRecipient !== null) {
+    if (this.state.currentRecipient !== null && this.state.message !== '') {
       const message = {
         message: this.state.message,
         sender: this.context.user.userId,
@@ -177,7 +196,7 @@ export default class Messages extends React.Component {
             {messageList}
           </div>
           <div className='new-message'>
-            <textarea className='new-message-input' value={this.state.message} onChange={this.handleTextChange}></textarea>
+            <textarea onKeyPress={this.enterSendChat} className='new-message-input' value={this.state.message} onChange={this.handleTextChange}></textarea>
             <button className='send-message-button' onClick={this.sendChat}>Send</button>
           </div>
         </div>
