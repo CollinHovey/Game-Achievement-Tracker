@@ -175,7 +175,9 @@ export default class HomeLoggedIn extends React.Component {
             <button className='new-post-button' onClick={this.handleNewPostPopup}>New Post</button>
           </div>
           {cancelSearch}
-          {postsList}
+          <div className='post-list-container'>
+            {postsList}
+          </div>
         </div>
       </>
     );

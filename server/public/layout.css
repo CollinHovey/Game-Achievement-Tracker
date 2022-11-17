@@ -14,7 +14,7 @@ body {
 
 .login-form-container {
   padding-top: 4rem;
-  padding-bottom: 8.3rem;
+  height: 90vh;
   display: flex;
   justify-content: center;
   background-color: #eafbff;
@@ -24,6 +24,7 @@ body {
   font-size: 1.5rem;
   display: flex;
   flex-direction: column;
+  height: min-content;
   padding-bottom: 1.5rem;
   padding-left: 3rem;
   padding-right: 3rem;
@@ -53,8 +54,8 @@ body {
 }
 
 .signup-form-container {
-  padding-top: 2rem;
-  padding-bottom: 2.5rem;
+  padding-top: 4rem;
+  height: 90vh;
   display: flex;
   justify-content: center;
   background-color: #eafbff;
@@ -67,6 +68,7 @@ body {
   padding-bottom: 1.5rem;
   padding-left: 3rem;
   padding-right: 3rem;
+  height: min-content;
 }
 
 .signup-label {
@@ -78,7 +80,6 @@ body {
 }
 
 .signup-button {
-  width: fit-content;
   margin-top: 1rem;
 }
 
@@ -101,28 +102,4 @@ body {
   padding-bottom: 1rem;
   padding-left: 2rem;
   padding-right: 1rem;
-}
-
-.nav-container {
-  flex-basis: 70%;
-}
-
-@media screen and (max-width: 923px) {
-  .login-form-container {
-    padding-bottom: 6rem;
-  }
-
-  .login-form {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .signup-form-container {
-    padding-bottom: 1.9rem;
-  }
-
-  .signup-form {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
 }

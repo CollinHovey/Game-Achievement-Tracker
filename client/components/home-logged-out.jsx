@@ -102,7 +102,9 @@ export default class HomeLoggedOut extends React.Component {
             <input className='search-input' placeholder='Search' onKeyPress={this.handleSearch} value={this.state.search} onChange={this.handleChangeSearch}></input>
             </div>
             {cancelSearch}
-            {postsList}
+            <div className='post-list-container-logged-out'>
+              {postsList}
+            </div>
           </div>
         </>
     );

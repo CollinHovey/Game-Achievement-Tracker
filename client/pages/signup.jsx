@@ -61,7 +61,8 @@ export default class Signup extends React.Component {
             <input required placeholder='MyEmail' className='signup-input' type='email' id='email' value={this.state.email} onChange={this.handleEmailChange}></input>
             <div className='signup-button-container'>
               <button className='signup-button big-button'>Sign Up</button>
-              <a href='#login' className='login-link'>Already have an account? Login!</a>
+              <a href='#login' className='login-link'>Already have an account?</a>
+              <a href='#login' className='login-link'>Login!</a>
             </div>
           </form>
         </div>

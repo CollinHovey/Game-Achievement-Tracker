@@ -1,10 +1,26 @@
+.big-button {
+  font-size: 1rem;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.5rem 1.5rem;
+  transition: ease-in-out 0.2s;
+}
+
+.big-button:hover {
+  transition: ease-in-out 0.2s;
+  cursor: pointer;
+  background-color: #b5b5b5;
+}
+
 .login-form {
   background-color: #d9d9d9;
   border-radius: 1rem;
+  width: 100%;
 }
 
 .not-logged-in-header {
   background-color: #f0f0f0;
+  height: 10vh;
 }
 
 .login-input {
@@ -22,7 +38,7 @@
 #login-button {
   text-decoration: none;
   color: black;
-  font-size: 1.5rem;
+  font-size: 2rem;
   background-color: #f0f0f0;
 }
 
@@ -32,6 +48,11 @@
 
 #login-button:visited {
   color: black;
+}
+
+.logout-button {
+  padding: 0.75rem 1.35rem;
+  font-size: 0.75rem;
 }
 
 .signup-link {
@@ -44,6 +65,10 @@
   color: black;
 }
 
+.signup-button {
+  font-size: 2rem;
+}
+
 .signup-link:hover {
   transition: ease-in-out 0.2s;
   cursor: pointer;
@@ -53,6 +78,12 @@
 .signup-form {
   background-color: #d9d9d9;
   border-radius: 1rem;
+  width: 100%;
+}
+
+.signup-form-container {
+  width: 100%;
+  padding-top: 2rem;
 }
 
 .signup-input {
@@ -93,22 +124,11 @@
   margin-bottom: 0.5rem;
 }
 
-.big-button {
-  font-size: 1rem;
-  border: none;
-  border-radius: 1rem;
-  padding: 0.5rem 1.5rem;
-  transition: ease-in-out 0.2s;
-}
-
-.big-button:hover {
-  transition: ease-in-out 0.2s;
-  cursor: pointer;
-  background-color: #b5b5b5;
-}
-
 .header-title {
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 11ch;
 }
 
 .header-container {
@@ -128,6 +148,7 @@
 .nav-container {
   display: flex;
   align-items: center;
+  flex-basis: 70%;
 }
 
 .fa-bars {
@@ -206,7 +227,7 @@
 
 .nav-link {
   color: black;
-  padding: 1rem 2rem;
+  padding: 1rem;
   list-style: none;
   margin-bottom: 1rem;
   text-decoration: none;
@@ -230,9 +251,12 @@
   margin-left: 0;
   justify-content: space-between;
   flex-direction: column;
+  max-height: 58vh;
+  overflow-y: scroll;
 }
 
 .profile-nav {
+  flex-direction: column;
   background-color: #f0f0f0;
   flex-basis: 30%;
   list-style: none;
@@ -242,8 +266,8 @@
   justify-content: space-evenly;
   position: relative;
   z-index: 3;
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
 .active-true {
@@ -264,8 +288,14 @@
   border-radius: 1.5rem;
 }
 
+.game-edit-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .games-container {
-  margin-top: 0.5rem;
   flex-basis: 65%;
 }
 
@@ -276,12 +306,15 @@
   margin-left: 2rem;
   margin-right: 2rem;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
 
 .profile-game-title {
-  margin: 0;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 .add-game-container {
@@ -334,7 +367,8 @@
   z-index: 101;
   background-color: #b5dce6;
   border-radius: 1rem;
-  left: 33%;
+  left: 5%;
+  right: 5%;
   top: 30%;
   padding: 1rem;
   display: flex;
@@ -357,6 +391,7 @@
   padding-left: 1rem;
   padding-right: 1rem;
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .newgame-input:focus {
@@ -384,7 +419,8 @@
   z-index: 101;
   background-color: #b5dce6;
   border-radius: 1rem;
-  left: 33%;
+  left: 5%;
+  right: 5%;
   top: 30%;
   padding: 1rem;
   display: flex;
@@ -399,6 +435,7 @@
   padding-left: 1rem;
   padding-right: 1rem;
   margin-bottom: 2rem;
+  width: 100%;
 }
 
 .newachievement-input:focus {
@@ -476,6 +513,13 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  flex-direction: column;
+}
+
+.achievement-title,
+.achievement-detail {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
 }
 
 .achievement-title,
@@ -483,6 +527,7 @@
 .achievement-edit-container {
   flex-basis: 33%;
   text-align: center;
+  width: 100%;
 }
 
 .achievement-edit-container {
@@ -495,7 +540,6 @@
 }
 
 .edit-game-pencil {
-  margin-right: 2rem;
   color: #93c0cc;
 }
 
@@ -504,10 +548,6 @@
   cursor: pointer;
   transition: ease-in-out 0.2s;
   color: #5b7881;
-}
-
-.game-delete {
-  margin-right: 2rem;
 }
 
 .game-delete,
@@ -534,14 +574,21 @@
   font-size: 1.5rem;
   position: fixed;
   z-index: 101;
-  background-color: #bfbfbf;
-  left: 40%;
+  background-color: #b5dce6;
+  right: 5%;
+  left: 5%;
   top: 30%;
   padding: 1rem;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
+}
+
+.delete-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .delete-content-container {
@@ -553,8 +600,9 @@
 }
 
 .new-post-button {
-  font-size: 1rem;
+  font-size: 2rem;
   border: none;
+  margin-top: 2rem;
   border-radius: 1rem;
   padding: 0.5rem 1rem;
   transition: ease-in-out 0.2s;
@@ -574,13 +622,15 @@
 
 .home-logged-in-header-container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-evenly;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
 .search-input {
-  font-size: 1.25rem;
+  font-size: 2rem;
   border: none;
   border-radius: 3rem;
   padding: 0.5rem 1rem;
@@ -598,8 +648,9 @@
   z-index: 101;
   background-color: #b5dce6;
   border-radius: 1rem;
-  left: 15%;
-  top: 10%;
+  left: 5%;
+  right: 5%;
+  top: 20%;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -635,7 +686,6 @@
 #new-post-detail {
   border-radius: 1rem;
   height: 8em;
-  width: 40em;
   resize: none;
 }
 
@@ -684,6 +734,16 @@
   opacity: 0.7;
 }
 
+.post-list-container {
+  overflow-y: scroll;
+  max-height: 65vh;
+}
+
+.post-list-container-logged-out {
+  overflow-y: scroll;
+  max-height: 78vh;
+}
+
 .cancel-search-container {
   display: flex;
   flex-direction: column;
@@ -724,13 +784,14 @@
 .profile-header-line {
   border: 1px solid #93c0cc;
   border-style: solid;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   opacity: 0.7;
 }
 
 .friends-list-header {
   text-align: center;
-  margin-top: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .requests-container {
@@ -741,6 +802,7 @@
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   align-items: center;
+  flex-direction: column;
 }
 
 .requests-buttons {
@@ -753,10 +815,15 @@
   cursor: pointer;
 }
 
+.requests-button-container {
+  display: flex;
+}
+
 .friends-name {
   font-size: 2rem;
   text-decoration: none;
   color: black;
+  margin-bottom: 0.5rem;
 }
 
 .friends-name:visited {
@@ -798,12 +865,16 @@
   margin: 0;
   border-top: 5px solid rgb(117, 117, 117);
   overflow-y: scroll;
-  max-height: 48rem;
+  max-height: 85vh;
+}
+
+.message-friend-head {
+  font-size: 1rem;
 }
 
 .message-friend {
   padding: 1rem;
-  font-size: 2rem;
+  font-size: 1rem;
   border-bottom: 1px solid rgb(117, 117, 117);
 }
 
@@ -829,6 +900,7 @@
 }
 
 .messages {
+  min-height: 20vh;
   overflow-y: scroll;
   display: flex;
   flex-direction: column-reverse;
@@ -861,7 +933,7 @@
 
 .send-message-button {
   position: absolute;
-  font-size: 2rem;
+  font-size: 1rem;
   top: 0.5rem;
   right: 0.5rem;
   padding: 1rem 2rem;
@@ -906,7 +978,110 @@
   }
 }
 
-@media screen and (max-width: 923px) {
+@media screen and (max-height: 600px) {
+  #login-button {
+    font-size: 1rem;
+  }
+
+  .search-input {
+    font-size: 1rem;
+  }
+
+  .post-list-container-logged-out {
+    max-height: 79vh;
+  }
+
+  .new-post-button {
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+
+  .home-logged-in-header-container {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .content-container {
+    max-height: 51vh;
+  }
+
+  .message-friends-list {
+    max-height: 84vh;
+  }
+
+  .not-logged-in-header {
+    font-size: 1.5rem;
+  }
+
+  .signup-form-container {
+    padding-top: 2rem;
+  }
+
+  .signup-label {
+    font-size: 1rem;
+  }
+
+  .signup-input {
+    font-size: 1rem;
+  }
+
+  .signup-button-container {
+    margin-top: 1.5rem;
+  }
+
+  .signup-button {
+    font-size: 1rem;
+  }
+
+  .login-link {
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #login-button {
+    font-size: 1rem;
+  }
+
+  .signup-form {
+    width: auto;
+  }
+
+  .signup-label {
+    font-size: 1rem;
+  }
+
+  .signup-input {
+    font-size: 1rem;
+  }
+
+  .signup-button-container {
+    margin-top: 1rem;
+  }
+
+  .login-form {
+    width: auto;
+  }
+
+  .post-list-container {
+    max-height: 63vh;
+  }
+
+  .post-list-container-logged-out {
+    max-height: 77vh;
+  }
+
+  .content-container {
+    max-height: 55vh;
+  }
+
+  .message-friends-list {
+    max-height: 84vh;
+  }
+}
+
+/* @media screen and (max-width: 923px) {
   .header-title {
     font-size: 1.5rem;
   }
@@ -966,4 +1141,4 @@
   .game-delete {
     font-size: 1.5rem;
   }
-}
+} */

@@ -45,7 +45,7 @@ export default class Header extends React.Component {
       messages = <a className='nav-link' href={`#messages?userId=${this.context.user.userId}`}>Messages</a>;
     }
     const { handleSignOut } = this.context;
-    let headerTitle = 'Welcome Guest!';
+    let headerTitle = 'Guest';
     let button = <a href='#login' id='login-button' className='big-button'>Login</a>;
     if (this.context.user !== null) {
       headerTitle = this.context.user.username;

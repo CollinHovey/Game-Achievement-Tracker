@@ -15,6 +15,10 @@ export default class ProfileFriends extends React.Component {
     this.removeFriend = this.removeFriend.bind(this);
   }
 
+  messageFriend() {
+    window.location.hash = '#messages';
+  }
+
   deleteRequest(senderId, index) {
     const tokenJSON = localStorage.getItem('token');
     fetch(`/api/deleteRequest/${senderId}`, {
