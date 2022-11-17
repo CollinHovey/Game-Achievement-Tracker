@@ -41,11 +41,20 @@ export default class Messages extends React.Component {
         friendId: message.friendId,
         status
       };
-      const newRoomMessages = chat.messages.slice();
-      newRoomMessages.unshift(newMessage);
-      const newChats = this.state.chats.slice();
-      newChats[chatIndex].messages = newRoomMessages;
-      this.setState({ chats: newChats });
+      if (!chat) {
+        const newMessages = [newMessage];
+        const newChat = {
+          chatId: message.friendId,
+          messages: newMessages
+        };
+        this.setState({ chats: newChat });
+      } else {
+        const newRoomMessages = chat.messages.slice();
+        newRoomMessages.unshift(newMessage);
+        const newChats = this.state.chats.slice();
+        newChats[chatIndex].messages = newRoomMessages;
+        this.setState({ chats: newChats });
+      }
     });
   }
 
@@ -186,7 +195,7 @@ export default class Messages extends React.Component {
     return (
       <div className='message-container'>
         <div className='message-friends-container'>
-          <h1>Friends</h1>
+          <h1 className='message-friend-head'>Friends</h1>
           <ul className='message-friends-list'>
             {friendsList}
           </ul>

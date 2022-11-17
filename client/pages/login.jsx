@@ -15,6 +15,12 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    if (this.context.loggedIn) {
+      window.location.hash = '#home';
+    }
+  }
+
   handleUsernameChange(event) {
     this.setState({ username: event.target.value });
   }
@@ -63,7 +69,8 @@ class Login extends React.Component {
             <div className='login-button-container'>
               <p className={`isvalid-login-${this.state.login}`}>Login Invalid</p>
               <button id='login-button' className='big-button'>Login</button>
-              <a href='#signup' className='signup-link'>{'Don\'t have and account? Sign up now!'}</a>
+              <a href='#signup' className='signup-link'>{'Don\'t have and account?'}</a>
+              <a href='#signup' className='signup-link'>Sign up now!</a>
             </div>
           </form>
         </div>
